@@ -1,2 +1,8 @@
 .idea
 .idea/*
+
+.vsode
+.vscode/*
+
+node_modules
+node_modules/*
