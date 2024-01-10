@@ -1,5 +1,5 @@
 // The controller must import the model(s) it works on
-let Author = require('../models/model_name');
+let Author = require('../models/CompetitionModel');
 // Remember to export the function outside the module
 exports.model_name_operations = function(req, res) {
     /** Usually operations on list of elements from the database !! */
