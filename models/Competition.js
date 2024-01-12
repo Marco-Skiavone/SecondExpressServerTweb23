@@ -14,6 +14,8 @@ const SchemeCompetition = new Schema({
      whatever: {type: String} */
 });
 
-const CompetitionModel = mongoose.model('CompetitionModel', SchemeCompetition);
+SchemeCompetition.set('toObject', {getters: true, virtuals: true});
 
-module.exports = CompetitionModel;
+const Competition = mongoose.model('Competition', SchemeCompetition);
+
+module.exports = Competition;
