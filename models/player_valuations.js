@@ -11,6 +11,8 @@ const SchemePlayerValuations = new Schema({
     current_dom_competition_code: {type: String}
 });
 
-const PlayerValuationsModel = mongoose.model('PlayerValuationsModel', SchemePlayerValuations);
+SchemePlayerValuations.set('toObject', {getters: true, virtuals: true});
 
-module.exports = PlayerValuationsModel;
+const PlayerValuations = mongoose.model('PlayerValuations', SchemePlayerValuations);
+
+module.exports = PlayerValuations;

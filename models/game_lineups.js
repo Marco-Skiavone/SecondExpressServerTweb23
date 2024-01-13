@@ -13,6 +13,8 @@ const SchemeGameLineups = new Schema({
     position: {type: String}
 });
 
-const GameLineupsModel = mongoose.model('GameLineupsModel', SchemeGameLineups);
+SchemeGameLineups.set('toObject', {getters: true, virtuals: true});
 
-module.exports = GameLineupsModel;
+const GameLineups = mongoose.model('GameLinups', SchemeGameLineups);
+
+module.exports = GameLineups;
