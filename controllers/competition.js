@@ -1,5 +1,5 @@
 // The controller must import the model(s) it works on
-const Competition = require('../models/Competition');
+const Competition = require('../models/competition');
 const {Model} = require("mongoose");
 // Remember to export the function outside the module
 //exports.CompetitionOperations = function(req, res) {
@@ -8,7 +8,7 @@ const {Model} = require("mongoose");
 // for example here we could have a find operation to retrieve the authors list
 // res.send('NOT IMPLEMENTED: model_name_operations');
 //};
-function insert(body) {
+function insert_competition(body) {
     return new Promise((resolve, reject) => {
         const mongoObj = new Model(body);
         mongoObj.save()
@@ -21,14 +21,14 @@ function insert(body) {
     });
 }
 
-module.exports.insert = insert;
+module.exports.insert = insert_competition;
 
-function query(body) {
+function query_competition(body) {
     return new Promise((resolve, reject) => {
         Model.find(body)
             .then(results => {
-                results.forEach((character) => {
-                    character._id = null;
+                results.forEach((competition) => {
+                    competition._id = null;
                 });
                 resolve(results);
             })
@@ -38,4 +38,4 @@ function query(body) {
     });
 }
 
-module.exports.query = query;
+module.exports.query = query_competition;

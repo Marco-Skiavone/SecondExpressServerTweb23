@@ -1,24 +1,8 @@
 var express = require('express');
 var router = express.Router();
-const competition = require("../controllers/Competition");
-
+const competition = require("../controllers/competition");
+const game_lineups = require("../controllers/game_lineups");
+const player_valuations = require("../controllers/player_valuations");
 /* GET home page. */
-router.post('/insert', async (req, res) => {
-    try {
-        const results = await competition.insert(req.body);
-        res.json(results);
-    } catch (error) {
-        res.status(500).json({error: error});
-    }
-});
-
-router.post('/query', async (req, res) => {
-    try {
-        const results = await competition.query(req.body);
-        res.json(results);
-    } catch (error) {
-        res.status(500).json({error: error});
-    }
-});
 
 module.exports = router;
