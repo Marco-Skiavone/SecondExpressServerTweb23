@@ -19,6 +19,10 @@ let dataset_loaded = {
 
 router.get('/insert_mongo', (req, res) =>{
     // @todo: add 3 routes to call
+    // res.redirect('insert_competitions')
+    // res.redirect('insert_game_lineups')
+    // res.redirect('insert_player_valuations')
+    // res.end()
 })
 
 router.get('/insert_competitions', (req, res) =>{
@@ -28,6 +32,34 @@ router.get('/insert_competitions', (req, res) =>{
                 dataset_loaded.competitions = true;
                 console.log('competitions imported correctly!');
                 competitions_dataset = null;
+                res.send('Loaded dataset.')
+            })
+            .catch(err => res.status(500).send('error' + err))
+    } else
+        res.status(208).send('Already loaded.')
+})
+
+router.get('/insert_game_lineups', (req, res) =>{
+    if(!dataset_loaded.game_lineups){
+        import_dataset(gameLineupsModel, game_lineups_dataset)
+            .then(r => {
+                dataset_loaded.game_lineups = true;
+                console.log('game_lineups imported correctly!');
+                game_lineups_dataset = null;
+                res.send('Loaded dataset.')
+            })
+            .catch(err => res.status(500).send('error' + err))
+    } else
+        res.status(208).send('Already loaded.')
+})
+
+router.get('/insert_player_valuations', (req, res) =>{
+    if(!dataset_loaded.player_valuations){
+        import_dataset(playerValuationModel, player_valuations_dataset)
+            .then(r => {
+                dataset_loaded.player_valuations = true;
+                console.log('player_valuations imported correctly!');
+                player_valuations_dataset = null;
                 res.send('Loaded dataset.')
             })
             .catch(err => res.status(500).send('error' + err))
