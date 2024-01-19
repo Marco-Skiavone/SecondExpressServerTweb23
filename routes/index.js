@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const fs = require('fs');
 
-const dataset_path = '../json/';
+const dataset_path = './json/';
 
 let competitionDict = {
     'name'    : 'competition',
@@ -27,7 +27,6 @@ let playerValuationModelDict = {
 
 
 router.get('/insert_mongo', (req, res) =>{
-    // @todo: add 3 routes to call
     try {
         const competitionPromise = load_dataset(competitionDict)
         const gameLineupsPromise = load_dataset(gameLineupsDict);
