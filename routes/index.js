@@ -4,6 +4,13 @@ const fs = require('fs');
 
 const datasetPath = './json/';
 
+let appearanceDict = {
+    'name'    : 'appearance',
+    'model'   : require("../models/appearance"),
+    'dataset' : JSON.parse(fs.readFileSync(datasetPath + 'cleaned_appearances.json', 'utf-8')),
+    'isEmpty'  : true
+}
+
 let competitionDict = {
     'name'    : 'competition',
     'model'   : require("../models/competition"),
@@ -31,13 +38,22 @@ router.get('/insert_mongo', (req, res) =>{
         const competitionPromise = loadDataset(competitionDict)
         const gameLineupsPromise = loadDataset(gameLineupsDict);
         const playerValuationPromise = loadDataset(playerValuationModelDict)
-        Promise.all([competitionPromise, gameLineupsPromise,  playerValuationPromise])
+        const appearancePromise = loadDataset(appearanceDict)
+        Promise.all([competitionPromise, gameLineupsPromise,  playerValuationPromise, appearancePromise])
             .then(r => {
                 res.status(200).send('Loaded all dataset.')
             })
     } catch (err) {
         res.status(500).send('error' + err)
     }
+})
+
+router.get('/insert_appearance', (req, res) =>{
+    loadDataset(appearanceDict)
+        .then(r => {
+            res.status(200).send('Loaded dataset.')
+        })
+        .catch(err => res.status(500).send('error' + err))
 })
 
 router.get('/insert_competitions', (req, res) =>{

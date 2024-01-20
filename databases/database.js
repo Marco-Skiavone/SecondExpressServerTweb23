@@ -14,6 +14,7 @@ connection = mongoose.connect(mongoDB, {
         console.log('connection to mongodb did not work!' + JSON.stringify(err));
     });
 
+/*
 const disconnectAndDropDatabase = async () => {
     try {
         // Drop the database
@@ -34,3 +35,5 @@ const disconnectAndDropDatabase = async () => {
 process.on('exit', disconnectAndDropDatabase);
 process.on('SIGINT', disconnectAndDropDatabase); // Handles Ctrl+C
 process.on('SIGTERM', disconnectAndDropDatabase); // Handles termination signals
+
+ */
