@@ -8,28 +8,24 @@ let appearanceDict = {
     'name'    : 'appearance',
     'model'   : require("../models/appearance"),
     'dataset' : JSON.parse(fs.readFileSync(datasetPath + 'cleaned_appearances.json', 'utf-8')),
-    'isEmpty'  : true
 }
 
 let competitionDict = {
     'name'    : 'competition',
     'model'   : require("../models/competition"),
     'dataset' : JSON.parse(fs.readFileSync(datasetPath + 'cleaned_competitions.json', 'utf-8')),
-    'isEmpty'  : true
 }
 
 let gameLineupsDict = {
     'name'    : 'game lineups',
     'model' : require("../models/game_lineups"),
     'dataset' : JSON.parse(fs.readFileSync(datasetPath + 'cleaned_game_lineups.json', 'utf-8')),
-    'isEmpty': true
 }
 
 let playerValuationModelDict = {
     'name'    : 'player valuation',
     'model' : require("../models/player_valuations"),
     'dataset' : JSON.parse(fs.readFileSync(datasetPath + 'cleaned_player_valuations.json', 'utf-8')),
-    'isEmpty': true
 }
 
 
@@ -87,12 +83,11 @@ const batchSize = 50000; // You can adjust this based on your dataset size
  * is empty
  * */
 const loadDataset = async (modelDict) => {
-    if (modelDict.isEmpty) {
+    if (modelDict.dataset.length === 0) {
         for (let i = 0; i < modelDict.dataset.length; i += batchSize) {
             const batch = modelDict.dataset.slice(i, i + batchSize);
             await modelDict.model.insertMany(batch);
         }
-        modelDict.isEmpty = false;
         console.log(modelDict.name + " imported correctly!");
         modelDict.dataset = null;
     } else {
