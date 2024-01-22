@@ -80,20 +80,25 @@ router.get('/insert_player_valuations', (req, res) =>{
         .catch(err => res.status(500).send('error' + err))
 })
 
+
+const batchSize = 50000; // You can adjust this based on your dataset size
 /** It imports passed data to MongoDB
  * @param modelDict a dict containing model name, the scheme model where to insert data, the dataset and if the dataset
  * is empty
  * */
 const loadDataset = async (modelDict) => {
     if (modelDict.isEmpty) {
-        await modelDict.model.insertMany(modelDict.dataset)
+        for (let i = 0; i < modelDict.dataset.length; i += batchSize) {
+            const batch = modelDict.dataset.slice(i, i + batchSize);
+            await modelDict.model.insertMany(batch);
+        }
         modelDict.isEmpty = false;
         console.log(modelDict.name + " imported correctly!");
         modelDict.dataset = null;
-
-    } else
+    } else {
         console.log(modelDict.name + " wasn't empty!");
-}
+    }
+};
 
 
 module.exports = router;
