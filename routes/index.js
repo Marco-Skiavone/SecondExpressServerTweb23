@@ -7,27 +7,26 @@ const datasetPath = './json/';
 let appearanceDict = {
     'name'    : 'appearance',
     'model'   : require("../models/appearance"),
-    'dataset' : JSON.parse(fs.readFileSync(datasetPath + 'cleaned_appearances.json', 'utf-8')),
+    'dataset' : datasetPath + 'cleaned_appearances.json'
 }
 
 let competitionDict = {
     'name'    : 'competition',
     'model'   : require("../models/competition"),
-    'dataset' : JSON.parse(fs.readFileSync(datasetPath + 'cleaned_competitions.json', 'utf-8')),
+    'dataset' : datasetPath + 'cleaned_competitions.json'
 }
 
 let gameLineupsDict = {
     'name'    : 'game lineups',
     'model' : require("../models/game_lineups"),
-    'dataset' : JSON.parse(fs.readFileSync(datasetPath + 'cleaned_game_lineups.json', 'utf-8')),
+    'dataset' : datasetPath + 'cleaned_game_lineups.json'
 }
 
 let playerValuationDict = {
     'name'    : 'player valuation',
     'model' : require("../models/player_valuations"),
-    'dataset' : JSON.parse(fs.readFileSync(datasetPath + 'cleaned_player_valuations.json', 'utf-8')),
+    'dataset' : datasetPath + 'cleaned_player_valuations.json'
 }
-
 
 router.get('/insert_mongo', (req, res) =>{
     try {
@@ -83,17 +82,21 @@ const batchSize = 50000; // You can adjust this based on your dataset size
  * is empty
  * */
 const loadDataset = async (modelDict) => {
-    if (modelDict.dataset.length === 0) {
-        for (let i = 0; i < modelDict.dataset.length; i += batchSize) {
-            const batch = modelDict.dataset.slice(i, i + batchSize);
-            await modelDict.model.insertMany(batch);
+    if (!await modelDict.model.findOne()) {
+        try {
+            modelDict.dataset = JSON.parse(fs.readFileSync(modelDict.dataset, 'utf-8'))
+            for (let i = 0; i < modelDict.dataset.length; i += batchSize) {
+                const batch = modelDict.dataset.slice(i, i + batchSize);
+                await modelDict.model.insertMany(batch);
+            }
+            modelDict.dataset = null
+            console.log(modelDict.name + " imported correctly!");
+        } catch (err) {
+            console.log("Failed to load " + modelDict.name + " json to parse")
         }
-        console.log(modelDict.name + " imported correctly!");
-        modelDict.dataset = null;
     } else {
         console.log(modelDict.name + " wasn't empty!");
     }
 };
-
 
 module.exports = router;
