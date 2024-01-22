@@ -6,8 +6,7 @@ const SchemeCompetition = new Schema({
     sub_type: {type: String, required: true, max: 50},
     competition_type: {type: String, required: true, max: 20},
     country_name: {type: String, max: 20},
-    domestic_league_code: {type: String, max: 5},
-    competition_url: {type: String, required: true, max: 150}
+    domestic_league_code: {type: String, max: 5}
     /** first_name: {type: String, required: true, max: 100},
      family_name: {type: String, required: true, max: 100},
      dob: {type: Number},
