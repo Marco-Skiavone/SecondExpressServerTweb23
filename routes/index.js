@@ -36,43 +36,43 @@ router.get('/insert_mongo', (req, res) =>{
         const appearancePromise = loadDataset(appearanceDict)
         Promise.all([competitionPromise, gameLineupsPromise,  playerValuationPromise, appearancePromise])
             .then(r => {
-                res.status(200).send('Loaded all dataset.')
+                res.status(200).send('completed insertion_mongo.')
             })
     } catch (err) {
         res.status(500).send('error' + err)
     }
 })
 
-router.get('/insert_appearance', (req, res) =>{
+router.get('/insert_appearances', (req, res) =>{
     loadDataset(appearanceDict)
         .then(r => {
-            res.status(200).send('Loaded dataset.')
+            res.status(200).send('loaded dataset.')
         })
-        .catch(err => res.status(500).send('error' + err))
+        .catch(err => res.status(500).send('error occurred inserting appearances'))
 })
 
 router.get('/insert_competitions', (req, res) =>{
     loadDataset(competitionDict)
         .then(r => {
-            res.status(200).send('Loaded dataset.')
+            res.status(200).send('loaded dataset.')
         })
-        .catch(err => res.status(500).send('error' + err))
+        .catch(err => res.status(500).send('error occurred inserting competitions'))
 })
 
 router.get('/insert_game_lineups', (req, res) =>{
     loadDataset(gameLineupsDict)
         .then(r => {
-            res.status(200).send('Loaded dataset.')
+            res.status(200).send('loaded dataset.')
         })
-        .catch(err => res.status(500).send('error' + err))
+        .catch(err => res.status(500).send('error occurred inserting game lineups'))
 })
 
 router.get('/insert_player_valuations', (req, res) =>{
     loadDataset(playerValuationDict)
         .then(r => {
-            res.status(200).send('Loaded dataset.')
+            res.status(200).send('loaded dataset.')
         })
-        .catch(err => res.status(500).send('error' + err))
+        .catch(err => res.status(500).send('error occurred inserting player valuations'))
 })
 
 
@@ -92,7 +92,7 @@ const loadDataset = async (modelDict) => {
             modelDict.dataset = null
             console.log(modelDict.name + " imported correctly!");
         } catch (err) {
-            console.log("Failed to load " + modelDict.name + " json to parse")
+            console.log("failed to load " + modelDict.name + ": json not found")
         }
     } else {
         console.log(modelDict.name + " wasn't empty!");
