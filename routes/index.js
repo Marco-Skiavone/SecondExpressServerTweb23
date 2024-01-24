@@ -1,116 +1,102 @@
-var express = require('express');
-var router = express.Router();
-
-const competitionModel = require("../models/competition");
-const gameLineupsModel = require("../models/game_lineups");
-const playerValuationModel = require("../models/player_valuations");
-
-const csvParser = require('csv-parser');
+const express = require('express');
+const router = express.Router();
 const fs = require('fs');
-/* GET home page. */
 
-//Precondition str is not null
-function stringToBool(str) {
-    if (str === null) {
-        return new Error("Not valid string");
-    }
-    if (str === "False") {
-        return false;
-    } else if (str === "True") {
-        return true;
-    }
+const datasetPath = './json/';
+
+let appearanceDict = {
+    'name'    : 'appearance',
+    'model'   : require("../models/appearance"),
+    'dataset' : datasetPath + 'cleaned_appearances.json'
 }
 
-router.get('/insertGameLineups', (req, res) => {
-    const gameLineups = [];
+let competitionDict = {
+    'name'    : 'competition',
+    'model'   : require("../models/competition"),
+    'dataset' : datasetPath + 'cleaned_competitions.json'
+}
 
-    fs.createReadStream("./csv/game_lineups.csv")
-        .pipe(csvParser())
-        .on('data', (row) => {
-            const newGameLineups ={
-                game_lineups_id: row.game_lineups_id,
-                game_id: row.game_id,
-                club_id: row.club_id,
-                type: row.type,
-                number: row.number,
-                player_id: row.player_id,
-                player_name: row.player_name,
-                team_captain: stringToBool(row.team_captain),
-                position: row.position
-            };
-            gameLineups.push(newGameLineups);
-        })
-        .on('end', () => {
-            gameLineupsModel.insertMany(gameLineups)
-                .then((result) => {
-                    console.log(result.length + ' game lineups inserted');
-                    res.send('Game lineups successfully loaded on MongoDB!');
-                })
-                .catch((error) => {
-                    console.log(error);
-                    res.status(500).send('Error inserting game lineups');
-                });
-        });
-});
+let gameLineupsDict = {
+    'name'    : 'game lineups',
+    'model' : require("../models/game_lineups"),
+    'dataset' : datasetPath + 'cleaned_game_lineups.json'
+}
 
-router.get('/insertPlayerValuations', (req, res) => {
-    const playerValuations = [];
+let playerValuationDict = {
+    'name'    : 'player valuation',
+    'model' : require("../models/player_valuations"),
+    'dataset' : datasetPath + 'cleaned_player_valuations.json'
+}
 
-    fs.createReadStream("./csv/player_valuations.csv")
-        .pipe(csvParser())
-        .on('data', (row) => {
-            const newPlayerValuation = {
-                player_id: row.player_id,
-                last_season: row.last_season,
-                date: row.date,
-                date_week: row.date_week,
-                market_value_eur: row.market_value_eur,
-                current_club_id: row.current_club_id,
-                current_dom_competition_code: row.current_dom_competition_code
-            };
-            playerValuations.push(newPlayerValuation);
-        })
-        .on('end', () => {
-            playerValuationModel.insertMany(playerValuations)
-                .then((result) => {
-                    console.log(result.length + ' player valuations inserted');
-                    res.send('Player valuations successfully loaded on MongoDB!');
-                })
-                .catch((error) => {
-                    console.log(error);
-                    res.status(500).send('Error inserting player valuations');
-                });
-        });
-});
-
-    router.get('/insertCompetition', (req, res) => {
-        const competitions = [];
-
-        fs.createReadStream("./csv/competitions.csv")
-            .pipe(csvParser())
-            .on('data', (row) => {
-                const newCompetition ={
-                    competition_id: row.competition_id,
-                    competition_name: row.competition_name,
-                    sub_type: row.sub_type,
-                    competition_type: row.competition_type,
-                    country_name: row.country_name,
-                    domestic_league_code: row.domestic_league_code,
-                    competition_url: row.competition_url
-                };
-                competitions.push(newCompetition);
+router.get('/insert_mongo', (req, res) =>{
+    try {
+        const competitionPromise = loadDataset(competitionDict)
+        const gameLineupsPromise = loadDataset(gameLineupsDict)
+        const playerValuationPromise = loadDataset(playerValuationDict)
+        const appearancePromise = loadDataset(appearanceDict)
+        Promise.all([competitionPromise, gameLineupsPromise,  playerValuationPromise, appearancePromise])
+            .then(r => {
+                res.status(200).send('completed insertion_mongo.')
             })
-            .on('end', () => {
-                competitionModel.insertMany(competitions)
-                    .then((results) => {
-                        console.log(results.length + ' competitions inserted');
-                        res.send('Competitions successfully loaded on MongoDB!');
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                        res.status(500).send('Error inserting competitions');
-                    });
-            });
-    });
+    } catch (err) {
+        res.status(500).send('error' + err)
+    }
+})
 
-    module.exports = router;
+router.get('/insert_appearances', (req, res) =>{
+    loadDataset(appearanceDict)
+        .then(r => {
+            res.status(200).send('loaded dataset.')
+        })
+        .catch(err => res.status(500).send('error occurred inserting appearances'))
+})
+
+router.get('/insert_competitions', (req, res) =>{
+    loadDataset(competitionDict)
+        .then(r => {
+            res.status(200).send('loaded dataset.')
+        })
+        .catch(err => res.status(500).send('error occurred inserting competitions'))
+})
+
+router.get('/insert_game_lineups', (req, res) =>{
+    loadDataset(gameLineupsDict)
+        .then(r => {
+            res.status(200).send('loaded dataset.')
+        })
+        .catch(err => res.status(500).send('error occurred inserting game lineups'))
+})
+
+router.get('/insert_player_valuations', (req, res) =>{
+    loadDataset(playerValuationDict)
+        .then(r => {
+            res.status(200).send('loaded dataset.')
+        })
+        .catch(err => res.status(500).send('error occurred inserting player valuations'))
+})
+
+
+const batchSize = 50000; // You can adjust this based on your dataset size
+/** It imports passed data to MongoDB
+ * @param modelDict a dict containing model name, the scheme model where to insert data, the dataset and if the dataset
+ * is empty
+ * */
+const loadDataset = async (modelDict) => {
+    if (!await modelDict.model.findOne()) {
+        try {
+            modelDict.dataset = JSON.parse(fs.readFileSync(modelDict.dataset, 'utf-8'))
+            for (let i = 0; i < modelDict.dataset.length; i += batchSize) {
+                const batch = modelDict.dataset.slice(i, i + batchSize);
+                await modelDict.model.insertMany(batch);
+            }
+            modelDict.dataset = null
+            console.log(modelDict.name + " imported correctly!");
+        } catch (err) {
+            console.log("failed to load " + modelDict.name + ": json not found")
+        }
+    } else {
+        console.log(modelDict.name + " wasn't empty!");
+    }
+};
+
+module.exports = router;
