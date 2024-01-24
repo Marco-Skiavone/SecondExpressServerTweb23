@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const fs = require('fs');
+const {load} = require("debug");
 
 const datasetPath = './json/';
 
@@ -28,6 +29,12 @@ let playerValuationDict = {
     'dataset' : datasetPath + 'cleaned_player_valuations.json'
 }
 
+let flagDict = {
+    'name': 'flags',
+    'model': require("../models/flags"),
+    'dataset': datasetPath + 'flags.json'
+}
+
 router.get('/insert_mongo', (req, res) =>{
     try {
         const competitionPromise = loadDataset(competitionDict)
@@ -41,6 +48,14 @@ router.get('/insert_mongo', (req, res) =>{
     } catch (err) {
         res.status(500).send('error' + err)
     }
+})
+
+router.get('/insert_flags', (req, res) =>{
+    loadDataset(flagDict)
+        .then(r => {
+            res.status(200).send('loaded dataset.')
+        })
+        .catch(err => res.status(500).send('error occurred inserting appearances'))
 })
 
 router.get('/insert_appearances', (req, res) =>{
