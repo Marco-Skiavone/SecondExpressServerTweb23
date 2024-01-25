@@ -6,42 +6,56 @@ const {load} = require("debug");
 const datasetPath = './json/';
 
 let appearanceDict = {
-    'name'    : 'appearance',
-    'model'   : require("../models/appearance"),
-    'dataset' : datasetPath + 'cleaned_appearances.json'
+    'name': 'appearance',
+    'controller': require("../controllers/appearance"),
+    'dataset': datasetPath + 'cleaned_appearances.json'
 }
 
 let competitionDict = {
-    'name'    : 'competition',
-    'model'   : require("../models/competition"),
-    'dataset' : datasetPath + 'cleaned_competitions.json'
+    'name': 'competition',
+    'controller': require("../controllers/competition"),
+    'dataset': datasetPath + 'cleaned_competitions.json'
 }
 
 let gameLineupsDict = {
-    'name'    : 'game lineups',
-    'model' : require("../models/game_lineups"),
-    'dataset' : datasetPath + 'cleaned_game_lineups.json'
+    'name': 'game lineups',
+    'controller': require("../controllers/game_lineups"),
+    'dataset': datasetPath + 'cleaned_game_lineups.json'
 }
 
 let playerValuationDict = {
-    'name'    : 'player valuation',
-    'model' : require("../models/player_valuations"),
-    'dataset' : datasetPath + 'cleaned_player_valuations.json'
+    'name': 'player valuation',
+    'controller': require("../controllers/player_valuations"),
+    'dataset': datasetPath + 'cleaned_player_valuations.json'
 }
 
 let flagDict = {
     'name': 'flags',
-    'model': require("../models/flags"),
+    'controller': require("../controllers/flags"),
     'dataset': datasetPath + 'flags.json'
 }
+router.get('/international_competition/:domestic_league_code', async (req, res) => {
+    const domestic_league_code = req.params.domestic_league_code;
+    await competitionDict.model.find({domestic_league_code: domestic_league_code}, 'competition_id domestic_league_code competition_name')
+        .then(competitions => {
+            if (competitions.length <= 0) {
+                res.json("not found");
+            } else {
 
-router.get('/insert_mongo', (req, res) =>{
+                res.json(competitions);
+            }
+        })
+        .catch((err) => {
+            res.status(500).send('Invalid data or not found' + JSON.stringify(err));
+        });
+});
+router.get('/insert_mongo', (req, res) => {
     try {
         const competitionPromise = loadDataset(competitionDict)
         const gameLineupsPromise = loadDataset(gameLineupsDict)
         const playerValuationPromise = loadDataset(playerValuationDict)
         const appearancePromise = loadDataset(appearanceDict)
-        Promise.all([competitionPromise, gameLineupsPromise,  playerValuationPromise, appearancePromise])
+        Promise.all([competitionPromise, gameLineupsPromise, playerValuationPromise, appearancePromise])
             .then(r => {
                 res.status(200).send('completed insertion_mongo.')
             })
@@ -50,7 +64,7 @@ router.get('/insert_mongo', (req, res) =>{
     }
 })
 
-router.get('/insert_flags', (req, res) =>{
+router.get('/insert_flags', (req, res) => {
     loadDataset(flagDict)
         .then(r => {
             res.status(200).send('loaded dataset.')
@@ -58,15 +72,15 @@ router.get('/insert_flags', (req, res) =>{
         .catch(err => res.status(500).send('error occurred inserting appearances'))
 })
 
-router.get('/insert_appearances', (req, res) =>{
+router.get('/insert_appearances', (req, res) => {
     loadDataset(appearanceDict)
         .then(r => {
             res.status(200).send('loaded dataset.')
         })
-        .catch(err => res.status(500).send('error occurred inserting appearances'))
+        .catch(err => res.status(500).send('error occurred inserting appearances, '+ err))
 })
 
-router.get('/insert_competitions', (req, res) =>{
+router.get('/insert_competitions', (req, res) => {
     loadDataset(competitionDict)
         .then(r => {
             res.status(200).send('loaded dataset.')
@@ -74,7 +88,7 @@ router.get('/insert_competitions', (req, res) =>{
         .catch(err => res.status(500).send('error occurred inserting competitions'))
 })
 
-router.get('/insert_game_lineups', (req, res) =>{
+router.get('/insert_game_lineups', (req, res) => {
     loadDataset(gameLineupsDict)
         .then(r => {
             res.status(200).send('loaded dataset.')
@@ -82,7 +96,7 @@ router.get('/insert_game_lineups', (req, res) =>{
         .catch(err => res.status(500).send('error occurred inserting game lineups'))
 })
 
-router.get('/insert_player_valuations', (req, res) =>{
+router.get('/insert_player_valuations', (req, res) => {
     loadDataset(playerValuationDict)
         .then(r => {
             res.status(200).send('loaded dataset.')
@@ -97,12 +111,12 @@ const batchSize = 50000; // You can adjust this based on your dataset size
  * is empty
  * */
 const loadDataset = async (modelDict) => {
-    if (!await modelDict.model.findOne()) {
+    if (!await modelDict.controller.isEmpty()) {
         try {
             modelDict.dataset = JSON.parse(fs.readFileSync(modelDict.dataset, 'utf-8'))
             for (let i = 0; i < modelDict.dataset.length; i += batchSize) {
                 const batch = modelDict.dataset.slice(i, i + batchSize);
-                await modelDict.model.insertMany(batch);
+                await modelDict.controller.insertMany(batch);
             }
             modelDict.dataset = null
             console.log(modelDict.name + " imported correctly!");
