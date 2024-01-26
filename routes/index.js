@@ -13,31 +13,31 @@ const flag = require("../controllers/flags")
 
 let appearanceDict = {
     'name': 'appearance',
-    'controller': new appearance.AppearanceController(),
+    'controller': new appearance(),
     'dataset': datasetPath + 'cleaned_appearances.json'
 }
 
 let competitionDict = {
     'name': 'competition',
-    'controller': new competition.CompetitionController(),
+    'controller': new competition,
     'dataset': datasetPath + 'cleaned_competitions.json'
 }
 
 let gameLineupsDict = {
     'name': 'game lineups',
-    'controller': new gameLineups.GameLineupsController(),
+    'controller': new gameLineups,
     'dataset': datasetPath + 'cleaned_game_lineups.json'
 }
 
 let playerValuationDict = {
     'name': 'player valuation',
-    'controller': new playerValuation.PlayerValuationController(),
+    'controller': new playerValuation,
     'dataset': datasetPath + 'cleaned_player_valuations.json'
 }
 
 let flagDict = {
     'name': 'flags',
-    'controller': new flag.FlagsController(),
+    'controller': new flag,
     'dataset': datasetPath + 'flags.json'
 }
 router.get('/international_competition/:domestic_league_code', async (req, res) => {
@@ -119,7 +119,7 @@ const batchSize = 50000; // You can adjust this based on your dataset size
  * is empty
  * */
 const loadDataset = async (modelDict) => {
-    if (!modelDict.controller.isEmpty()) {
+    if (modelDict.controller.isEmpty()) {
         try {
             modelDict.dataset = JSON.parse(fs.readFileSync(modelDict.dataset, 'utf-8'))
             modelDict.controller.pushDataset(modelDict.dataset)

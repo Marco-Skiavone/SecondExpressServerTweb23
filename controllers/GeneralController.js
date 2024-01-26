@@ -1,13 +1,15 @@
 class GeneralController {
     constructor(model) {
-        if (this.constructor !== GeneralController) {
+        if (this.constructor === GeneralController) {
+            throw new Error("Class is of abstract type and can't be instantiated");
+        } else {
             this.model = model
         }
-        throw new Error("Class is of abstract type and can't be instantiated");
     }
 
     isEmpty() {
-        return Boolean(this.model.findOne())
+        console.log(this.model.findOne())
+        return this.model.findOne()
     }
 
     pushDataset(dataset) {
@@ -28,3 +30,5 @@ class GeneralController {
         return Promise.all(promises)
     }
 }
+
+module.exports = GeneralController
