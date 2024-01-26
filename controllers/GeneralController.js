@@ -7,7 +7,6 @@ class GeneralController {
         }
     }
 
-    isEmpty() {
     async isEmpty() {
         const found = await this.model.findOne({})
         return found === null
