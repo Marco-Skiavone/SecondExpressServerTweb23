@@ -1,8 +1,8 @@
 let playerValuationsModel = require('../models/player_valuations');
+let GeneralController = require('./GeneralController');
 const {Model} = require("mongoose");
-let GeneralController = require('./GeneralController')
 
-class PlayerValuationController extends GeneralController{
+class PlayerValuationController extends GeneralController {
     constructor() {
         super(playerValuationsModel)
     }

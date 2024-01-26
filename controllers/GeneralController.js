@@ -8,8 +8,9 @@ class GeneralController {
     }
 
     isEmpty() {
-        console.log(this.model.findOne())
-        return this.model.findOne()
+    async isEmpty() {
+        const found = await this.model.findOne({})
+        return found === null
     }
 
     pushDataset(dataset) {

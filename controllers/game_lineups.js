@@ -1,8 +1,8 @@
 let gameLineupsModel = require('../models/game_lineups');
+let GeneralController = require('./GeneralController');
 const {Model} = require("mongoose");
-let GeneralController = require('./GeneralController')
 
-class GameLineupsController extends GeneralController{
+class GameLineupsController extends GeneralController {
     constructor() {
         super(gameLineupsModel)
     }
