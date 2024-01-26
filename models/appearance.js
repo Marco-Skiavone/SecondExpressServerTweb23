@@ -18,6 +18,6 @@ const SchemeAppearance = new Schema({
 
 SchemeAppearance.set('toObject', {getters: true});
 
-const Competition = mongoose.model('Appearance', SchemeAppearance);
+const Appearance = mongoose.model('Appearance', SchemeAppearance);
 
-module.exports = Competition;
+module.exports = Appearance;

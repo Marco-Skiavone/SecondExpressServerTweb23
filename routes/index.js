@@ -5,33 +5,39 @@ const {load} = require("debug");
 
 const datasetPath = './json/';
 
+const appearance = require("../controllers/appearance")
+const competition = require("../controllers/competition")
+const gameLineups = require("../controllers/game_lineups")
+const playerValuation = require("../controllers/player_valuations")
+const flag = require("../controllers/flags")
+
 let appearanceDict = {
     'name': 'appearance',
-    'controller': require("../controllers/appearance"),
+    'controller': new appearance.AppearanceController(),
     'dataset': datasetPath + 'cleaned_appearances.json'
 }
 
 let competitionDict = {
     'name': 'competition',
-    'controller': require("../controllers/competition"),
+    'controller': new competition.CompetitionController(),
     'dataset': datasetPath + 'cleaned_competitions.json'
 }
 
 let gameLineupsDict = {
     'name': 'game lineups',
-    'controller': require("../controllers/game_lineups"),
+    'controller': new gameLineups.GameLineupsController(),
     'dataset': datasetPath + 'cleaned_game_lineups.json'
 }
 
 let playerValuationDict = {
     'name': 'player valuation',
-    'controller': require("../controllers/player_valuations"),
+    'controller': new playerValuation.PlayerValuationController(),
     'dataset': datasetPath + 'cleaned_player_valuations.json'
 }
 
 let flagDict = {
     'name': 'flags',
-    'controller': require("../controllers/flags"),
+    'controller': new flag.FlagsController(),
     'dataset': datasetPath + 'flags.json'
 }
 router.get('/international_competition/:domestic_league_code', async (req, res) => {
@@ -52,6 +58,7 @@ router.get('/international_competition/:domestic_league_code', async (req, res) 
 router.get('/insert_mongo', (req, res) => {
     try {
         const competitionPromise = loadDataset(competitionDict)
+        const flagsPromise = loadDataset()
         const gameLineupsPromise = loadDataset(gameLineupsDict)
         const playerValuationPromise = loadDataset(playerValuationDict)
         const appearancePromise = loadDataset(appearanceDict)
@@ -106,25 +113,28 @@ router.get('/insert_player_valuations', (req, res) => {
 
 
 const batchSize = 50000; // You can adjust this based on your dataset size
+
 /** It imports passed data to MongoDB
  * @param modelDict a dict containing model name, the scheme model where to insert data, the dataset and if the dataset
  * is empty
  * */
 const loadDataset = async (modelDict) => {
-    if (!await modelDict.controller.isEmpty()) {
+    if (!modelDict.controller.isEmpty()) {
         try {
             modelDict.dataset = JSON.parse(fs.readFileSync(modelDict.dataset, 'utf-8'))
-            for (let i = 0; i < modelDict.dataset.length; i += batchSize) {
-                const batch = modelDict.dataset.slice(i, i + batchSize);
-                await modelDict.controller.insertMany(batch);
-            }
-            modelDict.dataset = null
-            console.log(modelDict.name + " imported correctly!");
+            modelDict.controller.pushDataset(modelDict.dataset)
+                .then(() => {
+                    console.log(modelDict.name, "imported correctly!");
+                    modelDict.dataset = null
+                })
+                .catch(err => {
+                    console.log("error pushing dataset in", modelDict.name, '\n'+ err)
+                })
         } catch (err) {
-            console.log("failed to load " + modelDict.name + ": json not found")
+            console.log("failed to load", modelDict.name + ": json not found\n"+ err)
         }
     } else {
-        console.log(modelDict.name + " wasn't empty!");
+        console.log(modelDict.name, "wasn't empty!");
     }
 };
 

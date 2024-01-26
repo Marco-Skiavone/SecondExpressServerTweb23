@@ -1,13 +1,10 @@
-const model = require('../models/appearance');
+const appearanceModel = require('../models/appearance');
 const {Model} = require("mongoose");
 
-function isEmpty() {
-    if(model.findOne(undefined, undefined, undefined))
-        return false
-    else
-        return true
+class AppearanceController extends GeneralController{
+    constructor() {
+        super(appearanceModel)
+    }
 }
 
-async function pushDataset(dataset) {
-    return model.insertMany(dataset)
-}
+module.exports = AppearanceController;
