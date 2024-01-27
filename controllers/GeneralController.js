@@ -1,33 +1,35 @@
+const fs = require("fs");
+const {Model} = require('mongoose')
+
 class GeneralController {
-    constructor(model) {
+    constructor(name, model, datasetPath) {
         if (this.constructor === GeneralController) {
             throw new Error("Class is of abstract type and can't be instantiated");
         } else {
+            this.name = name
             this.model = model
+            this.stream = fs.createReadStream(datasetPath);
         }
     }
 
     async isEmpty() {
-        const found = await this.model.findOne({})
+        const found = await this.model.findOne()
         return found === null
     }
 
-    pushDataset(dataset) {
-        const batchSize = 1000; // Adjust this value based on dataset size
-        const batches = [];
+    async uploadChunks(){
+        this.stream.on('data', chunk => {
+            const data = JSON.parse(chunk.toString('utf8'));
+            this.model.insertOne(data);
+        });
 
-        for (let i = 0; i < dataset.length; i += batchSize) {
-            const batch = dataset.slice(i, i + batchSize);
-            batches.push(batch);
-        }
+        this.stream.on('end', () => {
+            console.log('Completed uploading', this.name, 'dataset');
+        });
 
-        const promises = [];
-
-        for (const batch of batches) {
-            promises.push(this.model.insertMany(batch));
-        }
-
-        return Promise.all(promises)
+        this.stream.on('error', err => {
+            console.error('Error uploading', this.name, 'dataset:', err);
+        });
     }
 }
 

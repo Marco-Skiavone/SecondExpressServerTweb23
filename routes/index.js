@@ -23,11 +23,6 @@ let competitionDict = {
     'dataset': datasetPath + 'cleaned_competitions.json'
 }
 
-let gameLineupsDict = {
-    'name': 'game lineups',
-    'controller': new gameLineups,
-    'dataset': datasetPath + 'cleaned_game_lineups.json'
-}
 
 let playerValuationDict = {
     'name': 'player valuation',
