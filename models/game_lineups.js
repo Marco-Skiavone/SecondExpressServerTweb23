@@ -16,7 +16,7 @@ const SchemeGameLineups = new Schema({
 
 SchemeGameLineups.set('toObject', {getters: true});
 SchemeGameLineups.set('bufferCommands', false);
-const GameLineups = mongoose.model('GameLinups', SchemeGameLineups);
+const GameLineups = mongoose.model('GameLineups', SchemeGameLineups);
 
 module.exports = GameLineups;
 
