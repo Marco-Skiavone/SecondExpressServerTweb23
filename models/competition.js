@@ -16,8 +16,7 @@ const SchemeCompetition = new Schema({
 });
 
 SchemeCompetition.set('toObject', {getters: true});
-SchemeCompetition.set('bufferCommands', false)
-//SchemeCompetition.schema.bufferCommands = false;
+SchemeCompetition.set('bufferCommands', false);
 const competition = mongoose.model('Competition', SchemeCompetition);
 
 module.exports = competition;

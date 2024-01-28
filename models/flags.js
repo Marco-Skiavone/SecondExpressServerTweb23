@@ -9,7 +9,7 @@ const SchemeFlags = new Schema({
 });
 
 SchemeFlags.set('toObject', {getters: true});
-//SchemeFlags.schema.bufferCommands = false;
+SchemeFlags.set('bufferCommands', false);
 const Flags = mongoose.model('Flags', SchemeFlags);
 
 module.exports = Flags;

@@ -19,7 +19,7 @@ const SchemeAppearance = new Schema({
 });
 
 SchemeAppearance.set('toObject', {getters: true});
-//SchemeAppearance.schema.bufferCommands = false;
+SchemeAppearance.set('bufferCommands', false);  // does it work?
 const Appearance = mongoose.model('Appearance', SchemeAppearance);
 
 module.exports = Appearance;

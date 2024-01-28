@@ -1,9 +1,7 @@
 const fs = require("fs");
 const {Model} = require('mongoose')
-const path = require('path')
 
 class GeneralController {
-
     /**It generates the class instance and creates the input stream for the dataset. */
     constructor(name, model, datasetPath) {
         if (this.constructor === GeneralController) {
@@ -22,25 +20,19 @@ class GeneralController {
         return found === null
     }
 
-    async upload3() {
+    async loadDataset2() {
         try {
-            const filePath = path.resolve(__dirname, this.datasetPath);
-            const jsonData = fs.readFileSync(filePath, 'utf8');
-            const parsedData = JSON.parse(jsonData);
-            await this.model.insertMany(parsedData);
-            console.log('Done uploading', this.name, '.');
-        } catch (err) {
-            throw err
-        }
-    }
-
-    async upload2(){
-        try {
-            console.log(this.datasetPath)
-            await this.model.insertMany(JSON.parse(this.datasetPath))
-            console.log('Done uploading', this.name, '.')
-        } catch(err) {
-             throw err
+            // Push the data into the model if it's empty
+            if (await this.isEmpty()) {
+                let jsonData = JSON.parse(fs.readFileSync(this.datasetPath, 'utf-8'))
+                await this.model.insertMany(jsonData)
+                console.log("Model", this.name, "loaded.")
+            } else {
+                console.log("Model", this.name, "wasn't empty.")
+            }
+        } catch (error) {
+            console.error('Error loading data from JSON file:\n', error)
+            throw error
         }
     }
 
@@ -53,7 +45,7 @@ class GeneralController {
 
         this.stream.on('data', await function(chunk) {
             console.log('inserting:',chunk.length)
-            this.model.insertOne(JSON.parse(chunk.toString('utf8')))
+            this.model.insertOne(JSON.parse(chunk.toString('utf-8')))
         })
 
         this.stream.on('end', await function() {
@@ -70,8 +62,8 @@ class GeneralController {
     async loadDataset(){
         if (await this.isEmpty()) {
             try {
-                this.stream = fs.createReadStream(this.datasetPath);
-                await this.upload2()
+                this.stream = fs.createReadStream(this.datasetPath, {encoding: 'utf-8'});
+                await this.uploadChunks()
                     .then((result) => {
                         console.log('Successfully loaded', this.name, 'dataset:', result)
                         this.stream.close()
