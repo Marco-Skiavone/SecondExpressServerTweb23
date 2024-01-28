@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
+const {Model} = require("mongoose");
 const Schema = mongoose.Schema;
+
 const SchemeCompetition = new Schema({
     competition_id: {type: String, required: true, max: 5},
     competition_name: {type: String, required: true, max: 50},
@@ -14,7 +16,24 @@ const SchemeCompetition = new Schema({
 });
 
 SchemeCompetition.set('toObject', {getters: true});
-
+SchemeCompetition.set('bufferCommands', false)
+//SchemeCompetition.schema.bufferCommands = false;
 const competition = mongoose.model('Competition', SchemeCompetition);
 
 module.exports = competition;
+
+function insert(body) {
+    return new Promise((resolve, reject) => {
+        console.log(body)
+        const mongoObj = new competition(body);
+        mongoObj.save()
+            .then(results => {
+                resolve(results);
+            })
+            .catch(error => {
+                reject(error);
+            });
+    });
+}
+
+module.exports.insert = insert;

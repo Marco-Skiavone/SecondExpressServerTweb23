@@ -1,10 +1,11 @@
-const appearanceModel = require('../models/appearance');
-let GeneralController = require('./GeneralController');
 const {Model} = require("mongoose");
+const fs = require('fs');
+let GeneralController = require('./GeneralController');
+let appearanceModel = require('../models/appearance');
 
 class AppearanceController extends GeneralController {
-    constructor() {
-        super(appearanceModel)
+    constructor(datasetPath) {
+        super('appearances', appearanceModel, String(datasetPath + 'cleaned_appearances.json'))
     }
 }
 
