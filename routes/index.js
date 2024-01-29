@@ -20,12 +20,13 @@ const flagsController = new flag(generalPath)
 router.get('/competitions/get_national_competitions/:domestic_league_code', async (req, res) => {
     await competitionController.findByCode(req.params.domestic_league_code)
         .then(competitions => {
+            if(competitions.length > 0)
+                res.status(200).json(competitions)
             else
-                res.status(404).send('Competition not found!')
+                res.status(404).json('Competition by code not found!')
         })
-        .catch(error => {
-            console.log('Error fetching competitions database', error)
-            res.status(500).send('Internal server error')
+        .catch(err => {
+            res.status(500).json(String('Error: find_competitions_by_code: ' + err))
         })
 })
 

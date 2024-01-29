@@ -9,6 +9,8 @@ class CompetitionController extends GeneralController {
     }
 
     findByCode(domestic_league_code){
+        return this.model.find({domestic_league_code: domestic_league_code},
+            'competition_id domestic_league_code competition_name')
     }
 }
 
