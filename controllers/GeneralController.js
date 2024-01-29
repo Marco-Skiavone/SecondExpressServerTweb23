@@ -10,7 +10,6 @@ class GeneralController {
             this.name = name
             this.model = model
             this.datasetPath = datasetPath
-            this.stream = null
         }
     }
 
@@ -24,8 +23,12 @@ class GeneralController {
         try {
             // Push the data into the model if it's empty
             if (await this.isEmpty()) {
-                let jsonData = JSON.parse(fs.readFileSync(this.datasetPath, 'utf-8'))
-                await this.model.insertMany(jsonData)
+                const batchSize = 50000;
+                let dataset = JSON.parse(fs.readFileSync(this.datasetPath, 'utf-8'))
+                for (let i = 0; i < dataset.length; i += batchSize) {
+                    const batch = dataset.slice(i, i + batchSize);
+                    await this.model.insertMany(batch);
+                }
                 console.log("Model", this.name, "loaded.")
             } else {
                 console.log("Model", this.name, "wasn't empty.")

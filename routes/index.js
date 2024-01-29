@@ -11,14 +11,14 @@ let gameLineups = require("../controllers/game_lineups")
 let playerValuation = require("../controllers/player_valuations")
 let flag = require("../controllers/flags")
 
-const objAppearances = new appearance(generalPath)
-const objCompetitions = new competition(generalPath)
-const objGameLineups = new gameLineups(generalPath)
-const objPlayerValuations = new playerValuation(generalPath)
-const objFlags = new flag(generalPath)
+const appearanceController = new appearance(generalPath)
+const competitionController = new competition(generalPath)
+const gameLineupsController = new gameLineups(generalPath)
+const playerValuationController = new playerValuation(generalPath)
+const flagsController = new flag(generalPath)
 
 router.get('/international_competition/:domestic_league_code', async (req, res) => {
-    await objCompetitions.findById(req.params.domestic_league_code)
+    await competitionController.findById(req.params.domestic_league_code)
         .then(competitions => {
             if(competitions.length > 0)
                 res.status(200).end(competition)
@@ -31,11 +31,11 @@ router.get('/international_competition/:domestic_league_code', async (req, res) 
 });
 router.get('/insert_mongo', async (req, res) => {
     try {
-        let appearancesPromise = await objAppearances.loadDataset()
-        let competitionsPromise = await objCompetitions.loadDataset()
-        let gameLineupsPromise = await objGameLineups.loadDataset()
-        let playerValuationsPromise = await objGameLineups.loadDataset()
-        let flagsPromise = await objFlags.loadDataset()
+        let appearancesPromise =  appearanceController.loadDataset()
+        let competitionsPromise =  competitionController.loadDataset()
+        let gameLineupsPromise =  gameLineupsController.loadDataset()
+        let playerValuationsPromise =  playerValuationController.loadDataset()
+        let flagsPromise =  flagsController.loadDataset()
 
         Promise.all([competitionsPromise, gameLineupsPromise, playerValuationsPromise, appearancesPromise, flagsPromise])
             .then(response => {
@@ -50,41 +50,41 @@ router.get('/insert_mongo', async (req, res) => {
 })
 
 router.get('/insert_flags', (req, res) => {
-    objFlags.loadDataset()
+    flagsController.loadDataset()
         .then(response => {
-            res.status(200).send('Loaded dataset' + objFlags.name)
+            res.status(200).send('Loaded dataset' + flagsController.name)
         })
         .catch(err => res.status(500).send('Error occurred inserting flags: ' + err))
 })
 
 router.get('/insert_appearances', (req, res) => {
-    objAppearances.loadDataset()
+    appearanceController.loadDataset()
         .then(response => {
-            res.status(200).send('Loaded dataset' + objAppearances.name)
+            res.status(200).send('Loaded dataset' + appearanceController.name)
         })
         .catch(err => res.status(500).send('Error occurred inserting appearances: '+ err))
 })
 
 router.get('/insert_competitions', (req, res) => {
-    objCompetitions.loadDataset()
+    competitionController.loadDataset()
         .then(response => {
-            res.status(200).send('Loaded dataset' + objCompetitions.name)
+            res.status(200).send('Loaded dataset' + competitionController.name)
         })
         .catch(err => res.status(500).send('Error occurred inserting competitions: '+ err))
 })
 
 router.get('/insert_game_lineups', (req, res) => {
-    objGameLineups.loadDataset()
+    gameLineupsController.loadDataset()
         .then(response => {
-            res.status(200).send('Loaded dataset' + objGameLineups.name)
+            res.status(200).send('Loaded dataset' + gameLineupsController.name)
         })
         .catch(err => res.status(500).send('Error occurred inserting game lineups: '+ err))
 })
 
 router.get('/insert_player_valuations', (req, res) => {
-    objPlayerValuations.loadDataset()
+    playerValuationController.loadDataset()
         .then(response => {
-            res.status(200).send('Loaded dataset' + objPlayerValuations.name)
+            res.status(200).send('Loaded dataset' + playerValuationController.name)
         })
         .catch(err => res.status(500).send('Error occurred inserting player valuations: '+ err))
 })
