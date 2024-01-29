@@ -17,7 +17,7 @@ const gameLineupsController = new gameLineups(generalPath)
 const playerValuationController = new playerValuation(generalPath)
 const flagsController = new flag(generalPath)
 
-router.get('/competitions/get_by_id/:id', async (req, res) => {
+router.get('/competitions/get_competition_by_id/:id', async (req, res) => {
     await competitionController.findById(req.params.id)
         .then(competition => {
             if(competition.length > 0)
