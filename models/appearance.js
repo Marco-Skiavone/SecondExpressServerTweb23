@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
+const {Model} = require("mongoose");
 const Schema = mongoose.Schema;
+
 const SchemeAppearance = new Schema({
     appearance_id:{type: String, required: true},
     game_id:{type: Number, required: true},
@@ -17,7 +19,21 @@ const SchemeAppearance = new Schema({
 });
 
 SchemeAppearance.set('toObject', {getters: true});
+const Appearance = mongoose.model('Appearance', SchemeAppearance);
 
-const Competition = mongoose.model('Appearance', SchemeAppearance);
+module.exports = Appearance;
 
-module.exports = Competition;
+function insert(body) {
+    return new Promise((resolve, reject) => {
+        const mongoObj = new Model(body);
+        mongoObj.save()
+            .then(results => {
+                resolve(results);
+            })
+            .catch(error => {
+                reject(error);
+            });
+    });
+}
+
+module.exports.insert = insert;

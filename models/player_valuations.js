@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const {Model} = require('mongoose');
 const Schema = mongoose.Schema;
 
 const SchemePlayerValuations = new Schema({
@@ -12,7 +13,21 @@ const SchemePlayerValuations = new Schema({
 });
 
 SchemePlayerValuations.set('toObject', {getters: true});
-
 const PlayerValuations = mongoose.model('PlayerValuations', SchemePlayerValuations);
 
 module.exports = PlayerValuations;
+
+function insert(body) {
+    return new Promise((resolve, reject) => {
+        const mongoObj = new PlayerValuations(body);
+        mongoObj.save()
+            .then(results => {
+                resolve(results);
+            })
+            .catch(error => {
+                reject(error);
+            });
+    });
+}
+
+module.exports.insert = insert;

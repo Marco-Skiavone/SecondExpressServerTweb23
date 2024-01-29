@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const {Model} = require("mongoose");
 const Schema = mongoose.Schema;
 
 const SchemeGameLineups = new Schema({
@@ -14,7 +15,21 @@ const SchemeGameLineups = new Schema({
 });
 
 SchemeGameLineups.set('toObject', {getters: true});
-
-const GameLineups = mongoose.model('GameLinups', SchemeGameLineups);
+const GameLineups = mongoose.model('GameLineups', SchemeGameLineups);
 
 module.exports = GameLineups;
+
+function insert(body) {
+    return new Promise((resolve, reject) => {
+        const mongoObj = new Model(body);
+        mongoObj.save()
+            .then(results => {
+                resolve(results);
+            })
+            .catch(error => {
+                reject(error);
+            });
+    });
+}
+
+module.exports.insert = insert;
