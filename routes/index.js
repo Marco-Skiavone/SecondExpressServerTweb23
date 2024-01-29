@@ -29,6 +29,22 @@ router.get('/international_competition/:domestic_league_code', async (req, res) 
             res.status(500).end('Error: find_competitions_by_code')
         })
 });
+
+
+router.get('/flags/get_all', async (req, res)=>{
+    flagsController.getAll()
+        .then(flags => {
+            if (flags.length > 0) {
+                res.status(200).json(flags)
+            } else {
+                res.status(404).send('Something goes wrong')
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching flags database', error);
+            res.status(500).send('Internal server error')
+        })
+})
 router.get('/insert_mongo', async (req, res) => {
     try {
         let appearancesPromise =  appearanceController.loadDataset()
