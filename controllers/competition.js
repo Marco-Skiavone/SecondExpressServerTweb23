@@ -8,8 +8,7 @@ class CompetitionController extends GeneralController {
         super('competitions', competitionModel, String(datasetPath + 'cleaned_competitions.json'))
     }
 
-    findById(id){
-        return this.model.find({competition_id: id})
+    findByCode(domestic_league_code){
     }
 }
 

@@ -17,11 +17,9 @@ const gameLineupsController = new gameLineups(generalPath)
 const playerValuationController = new playerValuation(generalPath)
 const flagsController = new flag(generalPath)
 
-router.get('/competitions/get_competition_by_id/:id', async (req, res) => {
-    await competitionController.findById(req.params.id)
-        .then(competition => {
-            if(competition.length > 0)
-                res.status(200).json(competition)
+router.get('/competitions/get_national_competitions/:domestic_league_code', async (req, res) => {
+    await competitionController.findByCode(req.params.domestic_league_code)
+        .then(competitions => {
             else
                 res.status(404).send('Competition not found!')
         })
