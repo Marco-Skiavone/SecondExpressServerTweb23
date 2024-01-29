@@ -21,7 +21,6 @@ class GeneralController {
 
     async loadDataset() {
         try {
-            // Push the data into the model if it's empty
             if (await this.isEmpty()) {
                 const batchSize = 50000;
                 let dataset = JSON.parse(fs.readFileSync(this.datasetPath, 'utf-8'))
