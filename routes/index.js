@@ -31,11 +31,11 @@ router.get('/international_competition/:domestic_league_code', async (req, res) 
 });
 router.get('/insert_mongo', async (req, res) => {
     try {
-        let appearancesPromise = await objAppearances.loadDataset2()
-        let competitionsPromise = await objCompetitions.loadDataset2()
-        let gameLineupsPromise = await objGameLineups.loadDataset2()
-        let playerValuationsPromise = await objGameLineups.loadDataset2()
-        let flagsPromise = await objFlags.loadDataset2()
+        let appearancesPromise = await objAppearances.loadDataset()
+        let competitionsPromise = await objCompetitions.loadDataset()
+        let gameLineupsPromise = await objGameLineups.loadDataset()
+        let playerValuationsPromise = await objGameLineups.loadDataset()
+        let flagsPromise = await objFlags.loadDataset()
 
         Promise.all([competitionsPromise, gameLineupsPromise, playerValuationsPromise, appearancesPromise, flagsPromise])
             .then(response => {
@@ -50,7 +50,7 @@ router.get('/insert_mongo', async (req, res) => {
 })
 
 router.get('/insert_flags', (req, res) => {
-    objFlags.loadDataset2()
+    objFlags.loadDataset()
         .then(response => {
             res.status(200).send('Loaded dataset' + objFlags.name)
         })
@@ -58,7 +58,7 @@ router.get('/insert_flags', (req, res) => {
 })
 
 router.get('/insert_appearances', (req, res) => {
-    objAppearances.loadDataset2()
+    objAppearances.loadDataset()
         .then(response => {
             res.status(200).send('Loaded dataset' + objAppearances.name)
         })
@@ -66,7 +66,7 @@ router.get('/insert_appearances', (req, res) => {
 })
 
 router.get('/insert_competitions', (req, res) => {
-    objCompetitions.loadDataset2()
+    objCompetitions.loadDataset()
         .then(response => {
             res.status(200).send('Loaded dataset' + objCompetitions.name)
         })
@@ -74,7 +74,7 @@ router.get('/insert_competitions', (req, res) => {
 })
 
 router.get('/insert_game_lineups', (req, res) => {
-    objGameLineups.loadDataset2()
+    objGameLineups.loadDataset()
         .then(response => {
             res.status(200).send('Loaded dataset' + objGameLineups.name)
         })
@@ -82,7 +82,7 @@ router.get('/insert_game_lineups', (req, res) => {
 })
 
 router.get('/insert_player_valuations', (req, res) => {
-    objPlayerValuations.loadDataset2()
+    objPlayerValuations.loadDataset()
         .then(response => {
             res.status(200).send('Loaded dataset' + objPlayerValuations.name)
         })
