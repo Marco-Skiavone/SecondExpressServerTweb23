@@ -37,7 +37,7 @@ router.get('/flags/get_all', async (req, res)=>{
             if (flags.length > 0) {
                 res.status(200).json(flags)
             } else {
-                res.status(404).send('Something goes wrong')
+                res.status(404).send('Something goes wrong, flags seems empty')
             }
         })
         .catch(error => {
