@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const {Model} = require("mongoose");
 const Schema = mongoose.Schema;
 
 const SchemeCompetition = new Schema({
