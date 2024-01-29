@@ -13,7 +13,6 @@ const SchemePlayerValuations = new Schema({
 });
 
 SchemePlayerValuations.set('toObject', {getters: true});
-SchemePlayerValuations.set('bufferCommands', false);
 const PlayerValuations = mongoose.model('PlayerValuations', SchemePlayerValuations);
 
 module.exports = PlayerValuations;
