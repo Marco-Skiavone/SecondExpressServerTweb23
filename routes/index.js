@@ -30,6 +30,20 @@ router.get('/competitions/get_national_competitions/:domestic_league_code', asyn
         })
 })
 
+router.post('/competitions/get_competitions_by_ids', async (req, res) => {
+    await competitionController.getCompetitionsByIds(req.body.list)
+        .then((data) => {
+            if(data.length > 0)
+                res.status(200).send(data)
+            else
+                res.status(204).send('Competitions by competition_id not found!')
+        })
+        .catch(err => {
+            res.status(500).send('Error: competitions/get_competition_id_name_id: ' + err)
+            console.log(err)
+        })
+})
+
 router.get('/flags/get_all', async (req, res)=>{
     flagsController.getAll()
         .then(flags => {

@@ -7,7 +7,8 @@ const SchemeCompetition = new Schema({
     sub_type: {type: String, required: true, max: 50},
     competition_type: {type: String, required: true, max: 20},
     country_name: {type: String, max: 20},
-    domestic_league_code: {type: String, max: 5}
+    domestic_league_code: {type: String, max: 5},
+    img_url: {type: String, max: 160} //max value is taken from 'models/flags'
     /** first_name: {type: String, required: true, max: 100},
      family_name: {type: String, required: true, max: 100},
      dob: {type: Number},
