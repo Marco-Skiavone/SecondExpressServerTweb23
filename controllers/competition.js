@@ -1,41 +1,23 @@
-// The controller must import the model(s) it works on
-const Competition = require('../models/competition');
 const {Model} = require("mongoose");
-// Remember to export the function outside the module
-//exports.CompetitionOperations = function(req, res) {
-/** Usually operations on list of elements from the database !! */
-// Here we will make operations on the database and return the data
-// for example here we could have a find operation to retrieve the authors list
-// res.send('NOT IMPLEMENTED: model_name_operations');
-//};
-function insert_competition(body) {
-    return new Promise((resolve, reject) => {
-        const mongoObj = new Model(body);
-        mongoObj.save()
-            .then(results => {
-                resolve(results);
-            })
-            .catch(error => {
-                reject(error);
-            });
-    });
+const fs = require("fs");
+let GeneralController = require('./GeneralController');
+const competitionModel = require('../models/competition');
+
+class CompetitionController extends GeneralController {
+    constructor(datasetPath) {
+        super('competitions', competitionModel, String(datasetPath + 'cleaned_competitions.json'))
+    }
+
+    findByCode(DomesticLeagueCode){
+        return this.model.find({domestic_league_code: DomesticLeagueCode},
+            'competition_id domestic_league_code competition_name')
+    }
+
+    async getCompetitionsByIds(competitionIdList){
+        return await this.model.find({competition_id: {$in: competitionIdList}},
+            'competition_id competition_name img_url')
+    }
 }
 
-module.exports.insert = insert_competition;
+module.exports = CompetitionController;
 
-function query_competition(body) {
-    return new Promise((resolve, reject) => {
-        Model.find(body)
-            .then(results => {
-                results.forEach((competition) => {
-                    competition._id = null;
-                });
-                resolve(results);
-            })
-            .catch(error => {
-                reject(error);
-            });
-    });
-}
-
-module.exports.query = query_competition;

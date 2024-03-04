@@ -8,8 +8,8 @@ connection = mongoose.connect(mongoDB, {
     family: 4
 })
     .then(() => {
-        console.log('connection to mongodb worked!');
+        console.log('Connection to mongodb worked!');
     })
     .catch(err => {
-        console.log('connection to mongodb did not work!' + JSON.stringify(err));
+        console.log('Connection to mongodb did not work! ' + JSON.stringify(err));
     });
