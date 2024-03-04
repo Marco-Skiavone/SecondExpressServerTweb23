@@ -1,0 +1,16 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "MongoExpressServer",
+    "description": "Title",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3002/",
+      "description": "the local server that communicate with mongodb"
+    }
+  ],
+  "paths": {
+  }
+}
