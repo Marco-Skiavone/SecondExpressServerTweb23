@@ -50,11 +50,26 @@ router.get('/flags/get_all', async (req, res)=>{
             if (flags.length > 0) {
                 res.status(200).json(flags)
             } else {
-                res.status(404).send('Something gone wrong, \'flags\' seems empty')
+                res.status(404).send('Something gone wrong, \'flags\' seems empty.')
             }
         })
         .catch(error => {
             console.error('Error fetching flags database', error);
+            res.status(500).send('Internal server error')
+        })
+})
+
+router.get('/player_valuations/get_last_players_by_valuations', async (req, res) => {
+    playerValuationController.getLastByValuation()
+        .then(list => {
+            if (list && list.length > 0) {
+                res.status(200).json(list)
+            } else {
+                res.status(404).send('Something gone wrong, \'list\' seems empty in player_valuations.')
+            }
+        })
+        .catch(err => {
+            console.error('Error fetching player_valuations', err);
             res.status(500).send('Internal server error')
         })
 })
