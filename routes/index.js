@@ -10,6 +10,7 @@ let competition = require("../controllers/competition")
 let gameLineups = require("../controllers/game_lineups")
 let playerValuation = require("../controllers/player_valuations")
 let flag = require("../controllers/flags")
+const {listen} = require("express/lib/application");
 
 const appearanceController = new appearance(generalPath)
 const competitionController = new competition(generalPath)
@@ -20,7 +21,7 @@ const flagsController = new flag(generalPath)
 router.get('/competitions/get_national_competitions/:domestic_league_code', async (req, res) => {
     await competitionController.findByCode(req.params.domestic_league_code)
         .then(competitions => {
-            if(competitions.length > 0)
+            if (competitions.length > 0)
                 res.status(200).json(competitions)
             else
                 res.status(404).json('Competition by code not found!')
@@ -33,7 +34,7 @@ router.get('/competitions/get_national_competitions/:domestic_league_code', asyn
 router.post('/competitions/get_competitions_by_ids', async (req, res) => {
     await competitionController.getCompetitionsByIds(req.body.list)
         .then((data) => {
-            if(data.length > 0)
+            if (data.length > 0)
                 res.status(200).send(data)
             else
                 res.status(204).send('Competitions by competition_id not found!')
@@ -44,7 +45,7 @@ router.post('/competitions/get_competitions_by_ids', async (req, res) => {
         })
 })
 
-router.get('/flags/get_all', async (req, res)=>{
+router.get('/flags/get_all', async (req, res) => {
     flagsController.getAll()
         .then(flags => {
             if (flags.length > 0) {
@@ -59,12 +60,27 @@ router.get('/flags/get_all', async (req, res)=>{
         })
 })
 
-router.get('/player_valuations/get_last_valuation_of_player/:player_id', async (req, res) =>{
+router.get('/player_valuations/get_last_valuation_of_player/:player_id', async (req, res) => {
     playerValuationController.getLastValuationOfPlayer(req.params.player_id)
-        .then(list =>{
-            if (list && list.length > 0){
+        .then(list => {
+            if (list && list.length > 0) {
                 res.status(200).json(list)
-            } else{
+            } else {
+                res.status(404).send('Something gone wrong, \'list\' seems empty in player_valuations.')
+            }
+        })
+        .catch(err => {
+            console.error('Error fetching player_valuations', err);
+            res.status(500).send('Internal server error')
+        })
+})
+
+router.get('/player_valuations/get_max_valuation_of_player/:player_id', async (req, res) => {
+    playerValuationController.getMaxValuationOfPlayer(req.params.player_id)
+        .then(list => {
+            if (list && list.length > 0) {
+                res.status(200).json(list)
+            } else {
                 res.status(404).send('Something gone wrong, \'list\' seems empty in player_valuations.')
             }
         })
@@ -91,11 +107,11 @@ router.get('/player_valuations/get_last_players_by_valuations', async (req, res)
 
 router.get('/insert_mongo', async (req, res) => {
     try {
-        let appearancesPromise =  appearanceController.loadDataset()
-        let competitionsPromise =  competitionController.loadDataset()
-        let gameLineupsPromise =  gameLineupsController.loadDataset()
-        let playerValuationsPromise =  playerValuationController.loadDataset()
-        let flagsPromise =  flagsController.loadDataset()
+        let appearancesPromise = appearanceController.loadDataset()
+        let competitionsPromise = competitionController.loadDataset()
+        let gameLineupsPromise = gameLineupsController.loadDataset()
+        let playerValuationsPromise = playerValuationController.loadDataset()
+        let flagsPromise = flagsController.loadDataset()
 
         Promise.all([competitionsPromise, gameLineupsPromise, playerValuationsPromise, appearancesPromise, flagsPromise])
             .then(response => {
@@ -122,7 +138,7 @@ router.get('/insert_appearances', (req, res) => {
         .then(response => {
             res.status(200).send('Loaded dataset' + appearanceController.name)
         })
-        .catch(err => res.status(500).send('Error occurred inserting appearances: '+ err))
+        .catch(err => res.status(500).send('Error occurred inserting appearances: ' + err))
 })
 
 router.get('/insert_competitions', (req, res) => {
@@ -130,7 +146,7 @@ router.get('/insert_competitions', (req, res) => {
         .then(response => {
             res.status(200).send('Loaded dataset' + competitionController.name)
         })
-        .catch(err => res.status(500).send('Error occurred inserting competitions: '+ err))
+        .catch(err => res.status(500).send('Error occurred inserting competitions: ' + err))
 })
 
 router.get('/insert_game_lineups', (req, res) => {
@@ -138,7 +154,7 @@ router.get('/insert_game_lineups', (req, res) => {
         .then(response => {
             res.status(200).send('Loaded dataset' + gameLineupsController.name)
         })
-        .catch(err => res.status(500).send('Error occurred inserting game lineups: '+ err))
+        .catch(err => res.status(500).send('Error occurred inserting game lineups: ' + err))
 })
 
 router.get('/insert_player_valuations', (req, res) => {
@@ -146,7 +162,7 @@ router.get('/insert_player_valuations', (req, res) => {
         .then(response => {
             res.status(200).send('Loaded dataset' + playerValuationController.name)
         })
-        .catch(err => res.status(500).send('Error occurred inserting player valuations: '+ err))
+        .catch(err => res.status(500).send('Error occurred inserting player valuations: ' + err))
 })
 
 module.exports = router;
