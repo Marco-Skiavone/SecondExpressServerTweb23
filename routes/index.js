@@ -120,6 +120,21 @@ router.get('/player_valuations/get_last_players_by_valuations', async (req, res)
         })
 })
 
+router.get('/appearances/get_every_player_appearances/:player_id', async (req, res) => {
+    appearanceController.getEveryPlayerAppearances(req.params.player_id)
+        .then(list => {
+            if (list && list.length > 0) {
+                res.status(200).json(list)
+            } else {
+                res.status(404).send('Something gone wrong, \'list\' seems empty in appearances.')
+            }
+        })
+        .catch(err => {
+            console.error('Error fetching appearances', err);
+            res.status(500).send('Internal server error')
+        })
+})
+
 router.get('/insert_mongo', async (req, res) => {
     try {
         let appearancesPromise = appearanceController.loadDataset()
