@@ -7,7 +7,7 @@ class FlagsController extends GeneralController {
     }
 
     getAll = async () => {
-        return await this.model.find()
+        return await this.model.find({}, {_id: 0, __v: 0})
     }
 }
 
