@@ -150,6 +150,22 @@ router.get('/appearances/get_game_appearances/:game_id', async (req, res) => {
         })
 })
 
+router.get('/game_lineups/get_game_lineups_by_game_and_club/:game_id/:club_id', async (req, res) => {
+    gameLineupsController.getGameLineupsByGameAndClub(req.params.game_id, req.params.club_id)
+        .then(list => {
+            if (list && list.length > 0){
+                res.status(200).json(list)
+            }else {
+                res.status(404).send('Something gone wrong, \'list\' seems empty in game_lineups.')
+            }
+        })
+        .catch(err => {
+            console.error('Error fetching game_lineups', err);
+            res.status(500).send('Internal server error')
+        })
+})
+
+
 router.get('/insert_mongo', async (req, res) => {
     try {
         let appearancesPromise = appearanceController.loadDataset()
