@@ -75,25 +75,10 @@ router.get('/player_valuations/get_last_valuation_of_player/:player_id', async (
         })
 })
 
-router.get('/player_valuations/get_max_valuation_of_player/:player_id', async (req, res) => {
-    playerValuationController.getMaxValuationOfPlayer(req.params.player_id)
+router.get('/player_valuations/get_valuations_of_player/:player_id', async (req, res) => {
+    playerValuationController.getValuationsOfPlayer(req.params.player_id)
         .then(list => {
-            if (list && list.length > 0) {
-                res.status(200).json(list)
-            } else {
-                res.status(404).send('Something gone wrong, \'list\' seems empty in player_valuations.')
-            }
-        })
-        .catch(err => {
-            console.error('Error fetching player_valuations', err);
-            res.status(500).send('Internal server error')
-        })
-})
-
-router.get('/player_valuations/get_min_valuation_of_player/:player_id', async (req, res) => {
-    playerValuationController.getMinValuationOfPlayer(req.params.player_id)
-        .then(list => {
-            if (list && list.length > 0) {
+            if (list) {
                 res.status(200).json(list)
             } else {
                 res.status(404).send('Something gone wrong, \'list\' seems empty in player_valuations.')

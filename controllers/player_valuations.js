@@ -27,10 +27,9 @@ class PlayerValuationController extends GeneralController {
         }, {sort: {date: -1}, limit: 1});
     }
 
-    //@TODO: Maybe remove it
-    /** It retrieves the max valuation of a certain player
+    /** It retrieves the valuations of a certain player
      * @param player_id The player ID of the player */
-    getMaxValuationOfPlayer = async (player_id) => {
+    getValuationsOfPlayer = async (player_id) => {
         return await this.model.find({player_id: player_id}, {
             _id: 0,
             player_id: 0,
@@ -38,21 +37,7 @@ class PlayerValuationController extends GeneralController {
             current_club_id: 0,
             current_dom_competition_code: 0,
             __v: 0
-        }, {sort: {market_value_eur: -1}, limit: 1});
-    }
-
-    //@TODO: Maybe remove it
-    /** It retrieves the min valuation of a certain player
-     * @param player_id The player ID of the player */
-    getMinValuationOfPlayer = async (player_id) => {
-        return await this.model.find({player_id: player_id}, {
-            _id: 0,
-            player_id: 0,
-            date_week: 0,
-            current_club_id: 0,
-            current_dom_competition_code: 0,
-            __v: 0
-        }, {sort: {market_value_eur: 1}, limit: 1});
+        });
     }
 }
 

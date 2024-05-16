@@ -8,7 +8,7 @@ class CompetitionController extends GeneralController {
         super('competitions', competitionModel, String(datasetPath + 'cleaned_competitions.json'))
     }
 
-    findByCode(domesticLeagueCode){
+    findByCode(domesticLeagueCode) {
         if(domesticLeagueCode === 'null')
             domesticLeagueCode = null
         return this.model.find({domestic_league_code: domesticLeagueCode}, {_id: 0, __v: 0,
