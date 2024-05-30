@@ -60,6 +60,18 @@ router.get('/flags/get_all', async (req, res) => {
         })
 })
 
+router.get('/flags/get_nation_by_code/:code', (req, res) => {
+    if (req.params.code)
+        flagsController.getByCode(req.params.code)
+            .then(nation => res.status(200).json(nation))
+            .catch(err => {
+                console.error('Error fetching flags', err);
+                res.status(500).send('Internal server error')
+            })
+    else
+        res.status(500).json('Invalid code in \'/flags/get_nation_by_code/\' GET!')
+})
+
 router.get('/player_valuations/get_last_valuation_of_player/:player_id', async (req, res) => {
     playerValuationController.getLastValuationOfPlayer(req.params.player_id)
         .then(list => {
