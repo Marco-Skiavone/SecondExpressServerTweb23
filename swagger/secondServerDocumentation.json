@@ -2,15 +2,86 @@
   "openapi": "3.0.3",
   "info": {
     "title": "MongoExpressServer",
-    "description": "Title",
+    "description": "Express Server used as adapter to link up the MongoDB database with the Main express Server (http://localhost:3001)",
     "version": "1.0.0"
   },
   "servers": [
     {
       "url": "http://localhost:3002/",
-      "description": "the local server that communicate with mongodb"
+      "description": "Local server that communicates with MongoDB database"
     }
   ],
   "paths": {
+    "/competitions/get_national_competitions/{domestic_league_code}": {
+      "get": {
+        "tags": ["CRUD operations"],
+        "description": "Returns all competitions linked to the `domestic_league_code`",
+        "operationId": "getNationalCompetitionsByCode",
+        "parameters": [ {
+          "name": "domestic_league_code",
+          "example": "GB1",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }],
+        "requestBody": {
+          "required": false,
+          "content": {}
+        },
+        "responses": {
+          "200": {
+            "description": "An array of competition IDs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+
+                  },
+                  "example": [
+                    {
+                      "competition_id": "GB1",
+                      "competition_name": "premier-league",
+                      "domestic_league_code": "GB1"
+                    },
+                    {
+                      "competition_id": "CGB",
+                      "competition_name": "efl-cup",
+                      "domestic_league_code": "GB1"
+                    },
+                    {
+                      "competition_id": "FAC",
+                      "competition_name": "fa-cup",
+                      "domestic_league_code": "GB1"
+                    },
+                    {
+                      "competition_id": "GBCS",
+                      "competition_name": "community-shield",
+                      "domestic_league_code": "GB1"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Competition": {
+        "$ref": "#/components/schemas/Competition"
+      }
+    }
   }
 }
