@@ -18,6 +18,8 @@ const gameLineupsController = new gameLineups(generalPath)
 const playerValuationController = new playerValuation(generalPath)
 const flagsController = new flag(generalPath)
 
+console.log('secondExpressServer started!')
+
 router.get('/competitions/get_national_competitions/:domestic_league_code', async (req, res) => {
     await competitionController.findByCode(req.params.domestic_league_code)
         .then(competitions => {
