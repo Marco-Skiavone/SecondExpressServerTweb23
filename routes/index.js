@@ -164,7 +164,6 @@ router.get('/game_lineups/get_game_lineups_by_game_and_club/:game_id/:club_id', 
         })
 })
 
-
 router.get('/insert_mongo', async (req, res) => {
     try {
         let appearancesPromise = appearanceController.loadDataset()
