@@ -92,7 +92,7 @@ router.get('/player_valuations/get_last_valuation_of_player/:player_id', async (
 router.get('/player_valuations/get_valuations_of_player/:player_id', async (req, res) => {
     playerValuationController.getValuationsOfPlayer(req.params.player_id)
         .then(list => {
-            if (list) {
+            if (list && list.length) {
                 res.status(200).json(list)
             } else {
                 res.status(404).send('Something gone wrong, \'list\' seems empty in player_valuations.')

@@ -15,7 +15,7 @@ router.get('/competitions/get_competition_by_id/:id', async (req, res) => {
             if (competition.length > 0)
                 res.status(200).json(competition[0])
             else
-                res.status(404).json('Competition by id not found!')
+                res.status(404).send('Competition by id not found!')
         })
         .catch(err => {
             res.status(500).json(String('Error get_competition_by_id: ' + err))
