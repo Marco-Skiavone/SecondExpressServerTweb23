@@ -12,7 +12,7 @@ const competitionController = new competition(generalPath)
 router.get('/competitions/get_competition_by_id/:id', async (req, res) => {
     await competitionController.getCompetitionById(req.params.id)
         .then(competition => {
-            if (competition.length > 0)
+            if (!competition.length)
                 res.status(200).json(competition[0])
             else
                 res.status(404).send('Competition by id not found!')
