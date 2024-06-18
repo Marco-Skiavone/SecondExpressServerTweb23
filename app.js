@@ -22,7 +22,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 app.use('/', indexRouter);
-app.use('/', competitionRouter);
+app.use('/competitions', competitionRouter);
 app.use('/game_lineups', gameLineupsRouter);
 app.use('/users', usersRouter);
 

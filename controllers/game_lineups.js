@@ -23,11 +23,6 @@ class GameLineupsController extends GeneralController {
             __v: 0
         }, {sort: {type: 1}})
     }
-
-    getStartingLineups = async (game_id) => {
-        return await this.model.find({game_id: game_id, type: 'starting_lineup'},
-            {_id: 0, __v: 0, game_lineups_id: 0})
-    }
 }
 
 module.exports = GameLineupsController;

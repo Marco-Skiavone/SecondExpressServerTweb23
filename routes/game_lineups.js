@@ -8,16 +8,18 @@ const generalPath = './json/';
 let gameLineups = require("../controllers/game_lineups")
 const gameLineupsController = new gameLineups(generalPath)
 
-router.get('/get_starting_lineups/:game_id', async (req, res) => {
-    await gameLineupsController.getStartingLineups(req.params.game_id)
-        .then(starting_lineups => {
-            if (starting_lineups)
-                res.status(200).json(starting_lineups)
-            else    // if no starting lineup is found, then will return a body with ".error" attribute
-                res.status(404).json(JSON.stringify({error: 'Starting Lineups not found!'}))
+router.get('/get_game_lineups_by_game_and_club/:game_id/:club_id', async (req, res) => {
+    gameLineupsController.getGameLineupsByGameAndClub(req.params.game_id, req.params.club_id)
+        .then(list => {
+            if (list && list.length) {
+                res.status(200).json(list)
+            } else {
+                res.status(404).send('Something gone wrong, \'list\' seems empty in game_lineups.')
+            }
         })
         .catch(err => {
-            res.status(500).json(String('Error: find_competitions_by_code: ' + err))
+            console.error('Error fetching game_lineups', err);
+            res.status(500).send('Internal server error')
         })
 })
 
