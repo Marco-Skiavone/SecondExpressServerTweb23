@@ -8,7 +8,7 @@ let competition = require("../controllers/competition")
 
 const competitionController = new competition(generalPath)
 
-router.get('/competitions/get_competition_by_id/:id', async (req, res) => {
+router.get('/get_competition_by_id/:id', async (req, res) => {
     await competitionController.getCompetitionById(req.params.id)
         .then(competition => {
             if (competition.length)
