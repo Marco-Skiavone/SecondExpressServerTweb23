@@ -10,7 +10,6 @@ const gameLineupsRouter = require('./routes/game_lineups');
 const flagsRouter = require('./routes/flags');
 const playerValuationsRouter = require('./routes/player_valuations');
 const appearanceRouter = require('./routes/appearance');
-const usersRouter = require('./routes/users');
 const swaggerUi = require('swagger-ui-express');
 const swaggerAutogen = require('swagger-autogen')();
 const swaggerFile = require('./swagger/swagger-output.json');
@@ -30,6 +29,5 @@ app.use('/player_valuations', playerValuationsRouter);
 app.use('/appearances', appearanceRouter);
 app.use('/competitions', competitionRouter);
 app.use('/game_lineups', gameLineupsRouter);
-app.use('/users', usersRouter);
 
 module.exports = app;
