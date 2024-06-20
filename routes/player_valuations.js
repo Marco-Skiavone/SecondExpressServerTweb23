@@ -8,6 +8,21 @@ const generalPath = './json/';
 let playerValuation = require("../controllers/player_valuations")
 const playerValuationController = new playerValuation(generalPath)
 
+router.get('/insert_player_valuations', (req, res) => {
+    /* #swagger.tags = ['Load Data']
+     #swagger.description = 'GET route to load player_valuations\' dataset in MongoDB.
+     To load the data place the dataset in .json format in a directory in the root of the project called \'json\''
+     #swagger.responses[500] = {
+         description: 'Error! Problem in inserting player_valuations\' dataset in MongoDB'
+     }
+     */
+    playerValuationController.loadDataset()
+        .then(response => {
+            res.status(200).send('Loaded dataset' + playerValuationController.name)
+        })
+        .catch(err => res.status(500).send('Error occurred inserting player valuations: ' + err))
+})
+
 router.get('/get_valuations_of_player/:player_id', async (req, res) => {
     /* #swagger.tags = ['Player Valuations']
     #swagger.description = 'GET route to retrieve the valuations of a specific player.'

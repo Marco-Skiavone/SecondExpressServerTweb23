@@ -8,6 +8,21 @@ const generalPath = './json/';
 let appearance = require("../controllers/appearance")
 const appearanceController = new appearance(generalPath)
 
+router.get('/insert_appearances', (req, res) => {
+    /* #swagger.tags = ['Load Data']
+     #swagger.description = 'GET route to load appearances\' dataset in MongoDB.
+     To load the data place the dataset in .json format in a directory in the root of the project called \'json\''
+     #swagger.responses[500] = {
+         description: 'Error! Problem in inserting appearances\' dataset in MongoDB'
+     }
+     */
+    appearanceController.loadDataset()
+        .then(response => {
+            res.status(200).send('Loaded dataset' + appearanceController.name)
+        })
+        .catch(err => res.status(500).send('Error occurred inserting appearances: ' + err))
+})
+
 router.get('/get_every_player_appearances/:player_id', async (req, res) => {
     /* #swagger.tags = ['Appearances']
     #swagger.description = 'GET route to retrieve all the appearances of a specific player.'

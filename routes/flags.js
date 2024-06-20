@@ -8,6 +8,21 @@ const generalPath = './json/';
 let flag = require("../controllers/flags")
 const flagsController = new flag(generalPath)
 
+router.get('/insert_flags', (req, res) => {
+    /* #swagger.tags = ['Load Data']
+     #swagger.description = 'GET route to load flags\' dataset in MongoDB.
+     To load the data place the dataset in .json format in a directory in the root of the project called \'json\''
+     #swagger.responses[500] = {
+         description: 'Error! Problem in inserting flags\' dataset in MongoDB'
+     }
+     */
+    flagsController.loadDataset()
+        .then(response => {
+            res.status(200).send('Loaded dataset' + flagsController.name)
+        })
+        .catch(err => res.status(500).send('Error occurred inserting flags: ' + err))
+})
+
 router.get('/get_all', async (req, res) => {
     /* #swagger.tags = ['Flags']
     #swagger.description = 'GET route to retrieve flags data of every nation.'
