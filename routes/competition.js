@@ -4,9 +4,24 @@ const fs = require('fs');
 const {load} = require("debug");
 
 const generalPath = './json/';
-let competition = require("../controllers/competition")
 
+let competition = require("../controllers/competition")
 const competitionController = new competition(generalPath)
+
+router.get('/insert_competitions', (req, res) => {
+    /* #swagger.tags = ['Load Data']
+     #swagger.description = 'GET route to load competitions\' dataset in MongoDB.
+     To load the data place the dataset in .json format in a directory in the root of the project called \'json\''
+     #swagger.responses[500] = {
+         description: 'Error! Problem in inserting competitions\' dataset in MongoDB'
+     }
+     */
+    competitionController.loadDataset()
+        .then(response => {
+            res.status(200).send('Loaded dataset' + competitionController.name)
+        })
+        .catch(err => res.status(500).send('Error occurred inserting competitions: ' + err))
+})
 
 router.get('/get_competition_by_id/:id', async (req, res) => {
     /* #swagger.tags = ['Competition']
