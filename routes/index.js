@@ -84,7 +84,7 @@ router.get('/player_valuations/get_last_valuation_of_player/:player_id', async (
         description: 'Request content was not found.'
     }
     #swagger.responses[500] = {
-        description: 'Error! Called a GET without the required params. REQUIRED PARAMETER: \'player_id\'. GET: \'/get_lat_valuation_of_player\''
+        description: 'Error! Called a GET without the required params. REQUIRED PARAMETER: \'player_id\'. GET: \'/get_last_valuation_of_player\''
     }
     */
     playerValuationController.getLastValuationOfPlayer(req.params.player_id)
