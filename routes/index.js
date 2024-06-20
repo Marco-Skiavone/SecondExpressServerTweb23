@@ -71,36 +71,6 @@ router.get('/flags/get_nation_by_code/:code', (req, res) => {
         res.status(500).json('Invalid code in \'/flags/get_nation_by_code/\' GET!')
 })
 
-router.get('/player_valuations/get_last_valuation_of_player/:player_id', async (req, res) => {
-    /* #swagger.tags = ['Player Valuations']
-    #swagger.description = 'GET route to retrieve the last valuations of a specific player.'
-    #swagger.parameters['player_id'] = {
-        in: 'path',
-        description: 'The \`id\` of the player to retrieve.',
-        type: 'number',
-        required: 'true'
-    }
-    #swagger.responses[404] = {
-        description: 'Request content was not found.'
-    }
-    #swagger.responses[500] = {
-        description: 'Error! Called a GET without the required params. REQUIRED PARAMETER: \'player_id\'. GET: \'/get_last_valuation_of_player\''
-    }
-    */
-    playerValuationController.getLastValuationOfPlayer(req.params.player_id)
-        .then(list => {
-            if (list && list.length > 0) {
-                res.status(200).json(list)
-            } else {
-                res.status(404).send('Something gone wrong, \'list\' seems empty in player_valuations.')
-            }
-        })
-        .catch(err => {
-            console.error('Error fetching player_valuations', err);
-            res.status(500).send('Internal server error')
-        })
-})
-
 router.get('/player_valuations/get_valuations_of_player/:player_id', async (req, res) => {
     /* #swagger.tags = ['Player Valuations']
     #swagger.description = 'GET route to retrieve the valuations of a specific player.'
