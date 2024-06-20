@@ -15,11 +15,6 @@ class CompetitionController extends GeneralController {
                 sub_type: 0, competition_type: 0, country_name: 0})
     }
 
-    async getCompetitionsByIds(competitionIdList){
-        return await this.model.find({competition_id: {$in: competitionIdList}}, {_id: 0, __v: 0,
-            competition_id: 1, competition_name: 1})
-    }
-
     async getCompetitionById(competitionId){
         return await this.model.find({competition_id: competitionId}, {_id: 0, __v: 0});
     }

@@ -8,19 +8,19 @@ const generalPath = './json/';
 let gameLineups = require("../controllers/game_lineups")
 const gameLineupsController = new gameLineups(generalPath)
 
-router.get('/get_game_lineups_by_game_and_club/:game_id/:club_id', async (req, res) => {
-    gameLineupsController.getGameLineupsByGameAndClub(req.params.game_id, req.params.club_id)
-        .then(list => {
-            if (list && list.length) {
-                res.status(200).json(list)
-            } else {
-                res.status(404).send('Something gone wrong, \'list\' seems empty in game_lineups.')
-            }
+router.get('/insert_game_lineups', (req, res) => {
+    /* #swagger.tags = ['Load Data']
+     #swagger.description = 'GET route to load game_lineups\' dataset in MongoDB.
+     To load the data place the dataset in .json format in a directory in the root of the project called \'json\''
+     #swagger.responses[500] = {
+         description: 'Error! Problem in inserting game_lineups\' dataset in MongoDB'
+     }
+     */
+    gameLineupsController.loadDataset()
+        .then(response => {
+            res.status(200).send('Loaded dataset' + gameLineupsController.name)
         })
-        .catch(err => {
-            console.error('Error fetching game_lineups', err);
-            res.status(500).send('Internal server error')
-        })
+        .catch(err => res.status(500).send('Error occurred inserting game lineups: ' + err))
 })
 
 module.exports = router;
