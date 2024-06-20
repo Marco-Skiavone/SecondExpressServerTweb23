@@ -8,73 +8,14 @@ const generalPath = './json/';
 let appearance = require("../controllers/appearance")
 let competition = require("../controllers/competition")
 let gameLineups = require("../controllers/game_lineups")
-let playerValuation = require("../controllers/player_valuations")
-let flag = require("../controllers/flags")
+
 const {listen} = require("express/lib/application");
 
 const appearanceController = new appearance(generalPath)
 const competitionController = new competition(generalPath)
 const gameLineupsController = new gameLineups(generalPath)
-const playerValuationController = new playerValuation(generalPath)
-const flagsController = new flag(generalPath)
 
 console.log('secondExpressServer started!')
-
-
-
-router.get('/player_valuations/get_valuations_of_player/:player_id', async (req, res) => {
-    /* #swagger.tags = ['Player Valuations']
-    #swagger.description = 'GET route to retrieve the valuations of a specific player.'
-    #swagger.parameters['player_id'] = {
-        in: 'path',
-        description: 'The \`id\` of the player to retrieve.',
-        type: 'number',
-        required: 'true'
-    }
-    #swagger.responses[404] = {
-        description: 'Request content was not found.'
-    }
-    #swagger.responses[500] = {
-        description: 'Error! Called a GET without the required params. REQUIRED PARAMETER: \'player_id\'. GET: \'/get_valuations_of_player\''
-    }
-    */
-    playerValuationController.getValuationsOfPlayer(req.params.player_id)
-        .then(list => {
-            if (list && list.length) {
-                res.status(200).json(list)
-            } else {
-                res.status(404).send('Something gone wrong, \'list\' seems empty in player_valuations.')
-            }
-        })
-        .catch(err => {
-            console.error('Error fetching player_valuations', err);
-            res.status(500).send('Internal server error')
-        })
-})
-
-router.get('/player_valuations/get_last_players_by_valuations', async (req, res) => {
-    /* #swagger.tags = ['Player Valuations']
-    #swagger.description = 'GET route to retrieve 24 players with the more recent and higher valuations.'
-    #swagger.responses[404] = {
-        description: 'Request content was not found.'
-    }
-    #swagger.responses[500] = {
-        description: 'Error! internal server error'
-    }
-    */
-    playerValuationController.getLastByValuation()
-        .then(list => {
-            if (list && list.length > 0) {
-                res.status(200).json(list)
-            } else {
-                res.status(404).send('Something gone wrong, \'list\' seems empty in player_valuations.')
-            }
-        })
-        .catch(err => {
-            console.error('Error fetching player_valuations', err);
-            res.status(500).send('Internal server error')
-        })
-})
 
 router.get('/appearances/get_every_player_appearances/:player_id', async (req, res) => {
     /* #swagger.tags = ['Appearances']

@@ -8,6 +8,7 @@ const indexRouter = require('./routes/index');
 const competitionRouter = require('./routes/competition');
 const gameLineupsRouter = require('./routes/game_lineups');
 const flagsRouter = require('./routes/flags');
+const playerValuationsRouter = require('./routes/player_valuations');
 const usersRouter = require('./routes/users');
 const swaggerUi = require('swagger-ui-express');
 const swaggerAutogen = require('swagger-autogen')();
@@ -24,6 +25,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 app.use('/', indexRouter);
 app.use('/flags', flagsRouter);
+app.use('/player_valuations', playerValuationsRouter);
 app.use('/competitions', competitionRouter);
 app.use('/game_lineups', gameLineupsRouter);
 app.use('/users', usersRouter);
