@@ -21,6 +21,15 @@ const flagsController = new flag(generalPath)
 console.log('secondExpressServer started!')
 
 router.get('/flags/get_all', async (req, res) => {
+    /* #swagger.tags = ['Flags']
+    #swagger.description = 'GET route to retrieve flags data of every nation.'
+    #swagger.responses[404] = {
+        description: 'Request content was not found.'
+    }
+    #swagger.responses[500] = {
+        description: 'Error! Internal server error'
+    }
+    */
     flagsController.getAll()
         .then(flags => {
             if (flags.length > 0) {
@@ -36,6 +45,21 @@ router.get('/flags/get_all', async (req, res) => {
 })
 
 router.get('/flags/get_nation_by_code/:code', (req, res) => {
+    /* #swagger.tags = ['Flags']
+    #swagger.description = 'GET route to retrieve flag data about a specific nation.'
+    #swagger.parameters['code'] = {
+        in: 'path',
+        description: 'The \`nation_code\` of the nation data to retrieve.',
+        type: 'string',
+        required: 'true'
+    }
+    #swagger.responses[404] = {
+        description: 'Request content was not found.'
+    }
+    #swagger.responses[500] = {
+        description: 'Error! Called a GET without the required params. REQUIRED PARAMETER: \'code\'. GET: \'/get_nation_by_code\''
+    }
+    */
     if (req.params.code)
         flagsController.getByCode(req.params.code)
             .then(nation => res.status(200).json(nation))
@@ -48,6 +72,21 @@ router.get('/flags/get_nation_by_code/:code', (req, res) => {
 })
 
 router.get('/player_valuations/get_last_valuation_of_player/:player_id', async (req, res) => {
+    /* #swagger.tags = ['Player Valuations']
+    #swagger.description = 'GET route to retrieve the last valuations of a specific player.'
+    #swagger.parameters['player_id'] = {
+        in: 'path',
+        description: 'The \`id\` of the player to retrieve.',
+        type: 'number',
+        required: 'true'
+    }
+    #swagger.responses[404] = {
+        description: 'Request content was not found.'
+    }
+    #swagger.responses[500] = {
+        description: 'Error! Called a GET without the required params. REQUIRED PARAMETER: \'player_id\'. GET: \'/get_lat_valuation_of_player\''
+    }
+    */
     playerValuationController.getLastValuationOfPlayer(req.params.player_id)
         .then(list => {
             if (list && list.length > 0) {
@@ -63,6 +102,21 @@ router.get('/player_valuations/get_last_valuation_of_player/:player_id', async (
 })
 
 router.get('/player_valuations/get_valuations_of_player/:player_id', async (req, res) => {
+    /* #swagger.tags = ['Player Valuations']
+    #swagger.description = 'GET route to retrieve the valuations of a specific player.'
+    #swagger.parameters['player_id'] = {
+        in: 'path',
+        description: 'The \`id\` of the player to retrieve.',
+        type: 'number',
+        required: 'true'
+    }
+    #swagger.responses[404] = {
+        description: 'Request content was not found.'
+    }
+    #swagger.responses[500] = {
+        description: 'Error! Called a GET without the required params. REQUIRED PARAMETER: \'player_id\'. GET: \'/get_valuations_of_player\''
+    }
+    */
     playerValuationController.getValuationsOfPlayer(req.params.player_id)
         .then(list => {
             if (list && list.length) {
@@ -78,6 +132,15 @@ router.get('/player_valuations/get_valuations_of_player/:player_id', async (req,
 })
 
 router.get('/player_valuations/get_last_players_by_valuations', async (req, res) => {
+    /* #swagger.tags = ['Player Valuations']
+    #swagger.description = 'GET route to retrieve 24 players with the more recent and higher valuations.'
+    #swagger.responses[404] = {
+        description: 'Request content was not found.'
+    }
+    #swagger.responses[500] = {
+        description: 'Error! internal server error'
+    }
+    */
     playerValuationController.getLastByValuation()
         .then(list => {
             if (list && list.length > 0) {
@@ -93,6 +156,21 @@ router.get('/player_valuations/get_last_players_by_valuations', async (req, res)
 })
 
 router.get('/appearances/get_every_player_appearances/:player_id', async (req, res) => {
+    /* #swagger.tags = ['Appearances']
+    #swagger.description = 'GET route to retrieve all the appearances of a specific player.'
+    #swagger.parameters['player_id'] = {
+        in: 'path',
+        description: 'The \`id\` of the player to retrieve.',
+        type: 'number',
+        required: 'true'
+    }
+    #swagger.responses[404] = {
+        description: 'Request content was not found.'
+    }
+    #swagger.responses[500] = {
+        description: 'Error! Called a GET without the required params. REQUIRED PARAMETER: \'player_id\'. GET: \'/get_every_player_appearances\''
+    }
+    */
     appearanceController.getLastPlayerAppearances(req.params.player_id)
         .then(list => {
             if (list && list.length > 0) {
@@ -108,6 +186,21 @@ router.get('/appearances/get_every_player_appearances/:player_id', async (req, r
 })
 
 router.get('/appearances/get_game_appearances/:game_id', async (req, res) => {
+    /* #swagger.tags = ['Appearances']
+    #swagger.description = 'GET route to retrieve the appearances of a specific game.'
+    #swagger.parameters['game_id'] = {
+        in: 'path',
+        description: 'The \`id\` of the game to retrieve.',
+        type: 'number',
+        required: 'true'
+    }
+    #swagger.responses[404] = {
+        description: 'Request content was not found.'
+    }
+    #swagger.responses[500] = {
+        description: 'Error! Called a GET without the required params. REQUIRED PARAMETER: \'game_id\'. GET: \'/get_game_appearances\''
+    }
+    */
     appearanceController.getGameAppearances(req.params.game_id)
         .then(list => {
             if (list && list.length > 0) {
@@ -123,6 +216,13 @@ router.get('/appearances/get_game_appearances/:game_id', async (req, res) => {
 })
 
 router.get('/insert_mongo', async (req, res) => {
+    /* #swagger.tags = ['Load Data']
+     #swagger.description = 'GET route to load all the dataset in MongoDB.
+     To load the data place the dataset in .json format in a directory in the root of the project called \'json\''
+     #swagger.responses[500] = {
+         description: 'Error! Problem in inserting all the dataset in MongoDB'
+     }
+     */
     try {
         let appearancesPromise = appearanceController.loadDataset()
         let competitionsPromise = competitionController.loadDataset()
@@ -143,6 +243,13 @@ router.get('/insert_mongo', async (req, res) => {
 })
 
 router.get('/insert_flags', (req, res) => {
+    /* #swagger.tags = ['Load Data']
+     #swagger.description = 'GET route to load flags\' dataset in MongoDB.
+     To load the data place the dataset in .json format in a directory in the root of the project called \'json\''
+     #swagger.responses[500] = {
+         description: 'Error! Problem in inserting flags\' dataset in MongoDB'
+     }
+     */
     flagsController.loadDataset()
         .then(response => {
             res.status(200).send('Loaded dataset' + flagsController.name)
@@ -151,6 +258,13 @@ router.get('/insert_flags', (req, res) => {
 })
 
 router.get('/insert_appearances', (req, res) => {
+    /* #swagger.tags = ['Load Data']
+     #swagger.description = 'GET route to load appearances\' dataset in MongoDB.
+     To load the data place the dataset in .json format in a directory in the root of the project called \'json\''
+     #swagger.responses[500] = {
+         description: 'Error! Problem in inserting appearances\' dataset in MongoDB'
+     }
+     */
     appearanceController.loadDataset()
         .then(response => {
             res.status(200).send('Loaded dataset' + appearanceController.name)
@@ -159,6 +273,13 @@ router.get('/insert_appearances', (req, res) => {
 })
 
 router.get('/insert_competitions', (req, res) => {
+    /* #swagger.tags = ['Load Data']
+     #swagger.description = 'GET route to load competitions\' dataset in MongoDB.
+     To load the data place the dataset in .json format in a directory in the root of the project called \'json\''
+     #swagger.responses[500] = {
+         description: 'Error! Problem in inserting competitions\' dataset in MongoDB'
+     }
+     */
     competitionController.loadDataset()
         .then(response => {
             res.status(200).send('Loaded dataset' + competitionController.name)
@@ -167,6 +288,13 @@ router.get('/insert_competitions', (req, res) => {
 })
 
 router.get('/insert_game_lineups', (req, res) => {
+    /* #swagger.tags = ['Load Data']
+     #swagger.description = 'GET route to load game_lineups\' dataset in MongoDB.
+     To load the data place the dataset in .json format in a directory in the root of the project called \'json\''
+     #swagger.responses[500] = {
+         description: 'Error! Problem in inserting game_lineups\' dataset in MongoDB'
+     }
+     */
     gameLineupsController.loadDataset()
         .then(response => {
             res.status(200).send('Loaded dataset' + gameLineupsController.name)
@@ -175,6 +303,13 @@ router.get('/insert_game_lineups', (req, res) => {
 })
 
 router.get('/insert_player_valuations', (req, res) => {
+    /* #swagger.tags = ['Load Data']
+     #swagger.description = 'GET route to load player_valuations\' dataset in MongoDB.
+     To load the data place the dataset in .json format in a directory in the root of the project called \'json\''
+     #swagger.responses[500] = {
+         description: 'Error! Problem in inserting player_valuations\' dataset in MongoDB'
+     }
+     */
     playerValuationController.loadDataset()
         .then(response => {
             res.status(200).send('Loaded dataset' + playerValuationController.name)
