@@ -5,77 +5,15 @@ const {load} = require("debug");
 
 const generalPath = './json/';
 
-let appearance = require("../controllers/appearance")
 let competition = require("../controllers/competition")
 let gameLineups = require("../controllers/game_lineups")
 
 const {listen} = require("express/lib/application");
 
-const appearanceController = new appearance(generalPath)
 const competitionController = new competition(generalPath)
 const gameLineupsController = new gameLineups(generalPath)
 
 console.log('secondExpressServer started!')
-
-router.get('/appearances/get_every_player_appearances/:player_id', async (req, res) => {
-    /* #swagger.tags = ['Appearances']
-    #swagger.description = 'GET route to retrieve all the appearances of a specific player.'
-    #swagger.parameters['player_id'] = {
-        in: 'path',
-        description: 'The \`id\` of the player to retrieve.',
-        type: 'number',
-        required: 'true'
-    }
-    #swagger.responses[404] = {
-        description: 'Request content was not found.'
-    }
-    #swagger.responses[500] = {
-        description: 'Error! Called a GET without the required params. REQUIRED PARAMETER: \'player_id\'. GET: \'/get_every_player_appearances\''
-    }
-    */
-    appearanceController.getLastPlayerAppearances(req.params.player_id)
-        .then(list => {
-            if (list && list.length > 0) {
-                res.status(200).json(list)
-            } else {
-                res.status(404).send('Something gone wrong, \'list\' seems empty in appearances.')
-            }
-        })
-        .catch(err => {
-            console.error('Error fetching appearances', err);
-            res.status(500).send('Internal server error')
-        })
-})
-
-router.get('/appearances/get_game_appearances/:game_id', async (req, res) => {
-    /* #swagger.tags = ['Appearances']
-    #swagger.description = 'GET route to retrieve the appearances of a specific game.'
-    #swagger.parameters['game_id'] = {
-        in: 'path',
-        description: 'The \`id\` of the game to retrieve.',
-        type: 'number',
-        required: 'true'
-    }
-    #swagger.responses[404] = {
-        description: 'Request content was not found.'
-    }
-    #swagger.responses[500] = {
-        description: 'Error! Called a GET without the required params. REQUIRED PARAMETER: \'game_id\'. GET: \'/get_game_appearances\''
-    }
-    */
-    appearanceController.getGameAppearances(req.params.game_id)
-        .then(list => {
-            if (list && list.length > 0) {
-                res.status(200).json(list)
-            } else {
-                res.status(404).send('Something gone wrong, \'list\' seems empty in appearances.')
-            }
-        })
-        .catch(err => {
-            console.error('Error fetching appearances', err);
-            res.status(500).send('Internal server error')
-        })
-})
 
 router.get('/insert_mongo', async (req, res) => {
     /* #swagger.tags = ['Load Data']
