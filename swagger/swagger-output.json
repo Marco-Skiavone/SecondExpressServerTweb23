@@ -11,106 +11,70 @@
     "http"
   ],
   "paths": {
-    "/competitions/get_national_competitions/{domestic_league_code}": {
+    "/insert_mongo": {
       "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "domestic_league_code",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
+        "tags": [
+          "Load Data"
         ],
+        "description": "GET route to load all the dataset in MongoDB.\r  To load the data place the dataset in .json format in a directory in the root of the project called \\'json\\'",
         "responses": {
           "200": {
             "description": "OK"
           },
-          "404": {
-            "description": "Not Found"
-          },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Error! Problem in inserting all the dataset in MongoDB"
           }
         }
       }
     },
-    "/competitions/get_competitions_by_ids": {
-      "post": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "list": {
-                  "example": "any"
-                }
-              }
-            }
-          }
+    "/flags/insert_flags": {
+      "get": {
+        "tags": [
+          "Load Data"
         ],
+        "description": "GET route to load flags\\' dataset in MongoDB.\r  To load the data place the dataset in .json format in a directory in the root of the project called \\'json\\'",
         "responses": {
           "200": {
             "description": "OK"
           },
-          "204": {
-            "description": "No Content"
-          },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Error! Problem in inserting flags' dataset in MongoDB"
           }
         }
       }
     },
     "/flags/get_all": {
       "get": {
-        "description": "",
+        "tags": [
+          "Flags"
+        ],
+        "description": "GET route to retrieve flags data of every nation.",
         "responses": {
           "200": {
             "description": "OK"
           },
           "404": {
-            "description": "Not Found"
+            "description": "Request content was not found."
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Error! Internal server error"
           }
         }
       }
     },
     "/flags/get_nation_by_code/{code}": {
       "get": {
-        "description": "",
+        "tags": [
+          "Flags"
+        ],
+        "description": "GET route to retrieve flag data about a specific nation.",
         "parameters": [
           {
             "name": "code",
             "in": "path",
             "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/player_valuations/get_last_valuation_of_player/{player_id}": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "player_id",
-            "in": "path",
-            "required": true,
-            "type": "string"
+            "type": "string",
+            "description": "The 'nation_code' of the nation data to retrieve."
           }
         ],
         "responses": {
@@ -118,23 +82,43 @@
             "description": "OK"
           },
           "404": {
-            "description": "Not Found"
+            "description": "Request content was not found."
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Error! Called a GET without the required params. REQUIRED PARAMETER: 'code'. GET: '/get_nation_by_code'"
+          }
+        }
+      }
+    },
+    "/player_valuations/insert_player_valuations": {
+      "get": {
+        "tags": [
+          "Load Data"
+        ],
+        "description": "GET route to load player_valuations\\' dataset in MongoDB.\r  To load the data place the dataset in .json format in a directory in the root of the project called \\'json\\'",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Error! Problem in inserting player_valuations' dataset in MongoDB"
           }
         }
       }
     },
     "/player_valuations/get_valuations_of_player/{player_id}": {
       "get": {
-        "description": "",
+        "tags": [
+          "Player Valuations"
+        ],
+        "description": "GET route to retrieve the valuations of a specific player.",
         "parameters": [
           {
             "name": "player_id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "number",
+            "description": "The 'id' of the player to retrieve."
           }
         ],
         "responses": {
@@ -142,39 +126,62 @@
             "description": "OK"
           },
           "404": {
-            "description": "Not Found"
+            "description": "Request content was not found."
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Error! Called a GET without the required params. REQUIRED PARAMETER: 'player_id'. GET: '/get_valuations_of_player'"
           }
         }
       }
     },
     "/player_valuations/get_last_players_by_valuations": {
       "get": {
-        "description": "",
+        "tags": [
+          "Player Valuations"
+        ],
+        "description": "GET route to retrieve 24 players with the more recent and higher valuations.",
         "responses": {
           "200": {
             "description": "OK"
           },
           "404": {
-            "description": "Not Found"
+            "description": "Request content was not found."
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Error! internal server error"
+          }
+        }
+      }
+    },
+    "/appearances/insert_appearances": {
+      "get": {
+        "tags": [
+          "Load Data"
+        ],
+        "description": "GET route to load appearances\\' dataset in MongoDB.\r  To load the data place the dataset in .json format in a directory in the root of the project called \\'json\\'",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Error! Problem in inserting appearances' dataset in MongoDB"
           }
         }
       }
     },
     "/appearances/get_every_player_appearances/{player_id}": {
       "get": {
-        "description": "",
+        "tags": [
+          "Appearances"
+        ],
+        "description": "GET route to retrieve all the appearances of a specific player.",
         "parameters": [
           {
             "name": "player_id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "number",
+            "description": "The 'id' of the player to retrieve."
           }
         ],
         "responses": {
@@ -182,23 +189,27 @@
             "description": "OK"
           },
           "404": {
-            "description": "Not Found"
+            "description": "Request content was not found."
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Error! Called a GET without the required params. REQUIRED PARAMETER: 'player_id'. GET: '/get_every_player_appearances'"
           }
         }
       }
     },
     "/appearances/get_game_appearances/{game_id}": {
       "get": {
-        "description": "",
+        "tags": [
+          "Appearances"
+        ],
+        "description": "GET route to retrieve the appearances of a specific game.",
         "parameters": [
           {
             "name": "game_id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "number",
+            "description": "The 'id' of the game to retrieve."
           }
         ],
         "responses": {
@@ -206,29 +217,43 @@
             "description": "OK"
           },
           "404": {
-            "description": "Not Found"
+            "description": "Request content was not found."
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Error! Called a GET without the required params. REQUIRED PARAMETER: 'game_id'. GET: '/get_game_appearances'"
           }
         }
       }
     },
-    "/game_lineups/get_game_lineups_by_game_and_club/{game_id}/{club_id}": {
+    "/competitions/insert_competitions": {
       "get": {
-        "description": "",
+        "tags": [
+          "Load Data"
+        ],
+        "description": "GET route to load competitions\\' dataset in MongoDB.\r  To load the data place the dataset in .json format in a directory in the root of the project called \\'json\\'",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Error! Problem in inserting competitions' dataset in MongoDB"
+          }
+        }
+      }
+    },
+    "/competitions/get_competition_by_id/{id}": {
+      "get": {
+        "tags": [
+          "Competition"
+        ],
+        "description": "GET route to retrieve data of a specific competition.",
         "parameters": [
           {
-            "name": "game_id",
+            "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
-          },
-          {
-            "name": "club_id",
-            "in": "path",
-            "required": true,
-            "type": "string"
+            "type": "string",
+            "description": "The 'id' of the competition to retrieve."
           }
         ],
         "responses": {
@@ -236,98 +261,54 @@
             "description": "OK"
           },
           "404": {
-            "description": "Not Found"
+            "description": "Request content was not found."
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Error! Called a GET without the required params. REQUIRED PARAMETER: 'id'. GET: '/get_competition_by_id'"
           }
         }
       }
     },
-    "/insert_mongo": {
+    "/competitions/get_national_competitions/{domestic_league_code}": {
       "get": {
-        "description": "",
+        "tags": [
+          "Competition"
+        ],
+        "description": "GET route to retrieve the competitions of a certain nation.",
+        "parameters": [
+          {
+            "name": "domestic_league_code",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "The 'id' of the nation to retrieve."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Request content was not found."
+          },
+          "500": {
+            "description": "Error! Called a GET without the required params. REQUIRED PARAMETER: 'domestic_league_code'. GET: '/get_national_competitions'"
+          }
+        }
+      }
+    },
+    "/game_lineups/insert_game_lineups": {
+      "get": {
+        "tags": [
+          "Load Data"
+        ],
+        "description": "GET route to load game_lineups\\' dataset in MongoDB.\r  To load the data place the dataset in .json format in a directory in the root of the project called \\'json\\'",
         "responses": {
           "200": {
             "description": "OK"
           },
           "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/insert_flags": {
-      "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/insert_appearances": {
-      "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/insert_competitions": {
-      "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/insert_game_lineups": {
-      "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/insert_player_valuations": {
-      "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/users/": {
-      "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
+            "description": "Error! Problem in inserting game_lineups' dataset in MongoDB"
           }
         }
       }
