@@ -12,7 +12,7 @@ class PlayerValuationController extends GeneralController {
      * then it sorts them by the date. */
     getLastByValuation = async () => {
         return await this.model.find({}, {_id: 0, player_id: 1, market_value_eur: 1},
-            {sort: {date: -1}, limit: 24});
+            {sort: {date: -1, market_value_eur: -1}, limit: 24});
     }
 
     /** It retrieves the valuations of a certain player
